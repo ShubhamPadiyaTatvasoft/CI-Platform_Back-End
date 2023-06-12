@@ -1,0 +1,15 @@
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\bin\Debug\net6.0\CI-API.Common.deps.json
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\bin\Debug\net6.0\CI-API.Common.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\bin\Debug\net6.0\ref\CI-API.Common.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\bin\Debug\net6.0\CI-API.Common.pdb
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\bin\Debug\net6.0\CI-API.Core.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\bin\Debug\net6.0\CI-API.Core.pdb
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.csproj.AssemblyReference.cache
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.AssemblyInfoInputs.cache
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.AssemblyInfo.cs
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.csproj.CoreCompileInputs.cache
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.csproj.CopyComplete
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\ref\CI-API.Common.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Common\obj\Debug\net6.0\CI-API.Common.pdb
