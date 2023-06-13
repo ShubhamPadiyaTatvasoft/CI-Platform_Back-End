@@ -1,0 +1,14 @@
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\bin\Debug\net6.0\CI-API.Core.deps.json
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\bin\Debug\net6.0\CI-API.Core.runtimeconfig.json
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\bin\Debug\net6.0\CI-API.Core.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\bin\Debug\net6.0\ref\CI-API.Core.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\bin\Debug\net6.0\CI-API.Core.pdb
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.csproj.AssemblyReference.cache
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.AssemblyInfoInputs.cache
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.AssemblyInfo.cs
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.csproj.CoreCompileInputs.cache
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\ref\CI-API.Core.dll
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.pdb
+C:\Users\pca53\Desktop\CI-Angular-test\CIPlatform-API\CI-API\CI-API.Core\obj\Debug\net6.0\CI-API.Core.genruntimeconfig.cache
