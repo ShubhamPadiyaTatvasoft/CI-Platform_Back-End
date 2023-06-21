@@ -1,0 +1,13 @@
+/.vs
+/CI-API/bin
+/CI-API/obj
+/CI-API/.config
+/CI-API/Properties/PublishProfiles
+/CI-API.Application/bin
+/CI-API.Application/obj
+/CI-API.Common/obj
+/CI-API.Common/bin
+/CI-API.Core/obj
+/CI-API.Core/bin
+/CI-API.Data/bin
+/CI-API.Data/obj
