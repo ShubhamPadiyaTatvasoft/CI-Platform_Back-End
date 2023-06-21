@@ -14,6 +14,7 @@ namespace CI_API.Common.CommonModels
         public static int InvalidData = 401;
         public static int AlreadyExist = 409;
         public static int BadRequest = 500;
+        public static int RequestFailed = 400;
         #endregion
     }
 }

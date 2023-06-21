@@ -29,11 +29,14 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.WriteIndented = true;
 });
-builder.Services.AddDbContext<CipContext>();
+builder.Services.AddDbContext<CiPlatformDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILandingPageService, LandingPageService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILandingPageRepository, LandingPageRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
