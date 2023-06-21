@@ -19,8 +19,7 @@ namespace CI_API.Controllers
         #endregion
 
         #region LandingPage
-
-        [Authorize]
+        
         [HttpGet("LandingPage")]
         public async Task<JsonResult> LandingPage()
         {

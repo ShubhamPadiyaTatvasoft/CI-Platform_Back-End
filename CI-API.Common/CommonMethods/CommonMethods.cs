@@ -1,5 +1,8 @@
-﻿using CI_API.Core.CIDbContext;
+﻿using CI_API.Common.CommonModels;
+using CI_API.Core.CIDbContext;
 using CI_API.Core.Models;
+using CI_API.Core.ViewModel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -15,6 +18,10 @@ namespace CI_API.Common.CommonMethods
 {
     public class CommonMethods
     {
+       
+
+
+
         #region CreateJwt
         public static string CreateJwt(User user)
         {
@@ -33,14 +40,14 @@ namespace CI_API.Common.CommonMethods
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = identity,
-                    Expires = DateTime.Now.AddMinutes(1),
+                    Expires = DateTime.Now.AddMinutes(30),
                     SigningCredentials = credetials,
                 };
 
                 var token = jwtTokenHaandler.CreateToken(tokenDescriptor);
                 return jwtTokenHaandler.WriteToken(token);
             }
-            catch 
+            catch
             {
                 return "";
             }
@@ -83,10 +90,10 @@ namespace CI_API.Common.CommonMethods
                 smtpClient.Send(message);
                 return token;
             }
-            catch 
+            catch
             {
                 return "Email not sent";
-                
+
             }
         }
 

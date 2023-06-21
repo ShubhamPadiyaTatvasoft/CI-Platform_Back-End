@@ -5,9 +5,9 @@ namespace CI_API.Core.Models;
 
 public partial class ContactU
 {
-    public long? UserId { get; set; }
-
     public long ContactId { get; set; }
+
+    public long? UserId { get; set; }
 
     public string? UserName { get; set; }
 

@@ -1,0 +1,36 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "938ed01f-f5a5-4067-a67f-e0362fcb481b": {
+      "ProjectGuid": "938ed01f-f5a5-4067-a67f-e0362fcb481b",
+      "DisplayName": "CI-API.Core",
+      "ColorIndex": 0
+    },
+    "37a5c662-6680-47d7-b8ca-7646d345822a": {
+      "ProjectGuid": "37a5c662-6680-47d7-b8ca-7646d345822a",
+      "DisplayName": "CI-API.Data",
+      "ColorIndex": 1
+    },
+    "fecef295-f191-4197-8df9-76fe8f0b90a8": {
+      "ProjectGuid": "fecef295-f191-4197-8df9-76fe8f0b90a8",
+      "DisplayName": "CI-API.Application",
+      "ColorIndex": 2
+    },
+    "d392ae3e-96b7-47ff-9efc-2cfa3ae0afa0": {
+      "ProjectGuid": "d392ae3e-96b7-47ff-9efc-2cfa3ae0afa0",
+      "DisplayName": "CI-API",
+      "ColorIndex": 3
+    },
+    "93cb3cd8-3bd4-455a-8294-52b7061f3aa3": {
+      "ProjectGuid": "93cb3cd8-3bd4-455a-8294-52b7061f3aa3",
+      "DisplayName": "CI-API.Common",
+      "ColorIndex": 4
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 5
+}

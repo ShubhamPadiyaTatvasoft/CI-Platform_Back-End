@@ -17,9 +17,9 @@ namespace CI_API.Data.Repository
 
         #region Dependency Injection of DbContext 
 
-        private readonly CipContext _cIDbContext;
+        private readonly CiPlatformDbContext _cIDbContext;
 
-        public LandingPageRepository(CipContext cIDbContext)
+        public LandingPageRepository(CiPlatformDbContext cIDbContext)
         {
             _cIDbContext = cIDbContext;
         }
@@ -44,9 +44,10 @@ namespace CI_API.Data.Repository
 
                 return new JsonResult(new apiResponse<LandingPageViewModel> { Message = ResponseMessages.LoginSuccess, StatusCode = responseStatusCode.Success, Data = landingPageViewModel, Result = true });
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                return new JsonResult(new apiResponse<LandingPageViewModel> { Message = ResponseMessages.InvalidLoginCredentials, StatusCode = responseStatusCode.BadRequest, Result = true });
+                
             }
         }
         #endregion

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CI_API.Core.CIDbContext;
 
-public partial class CipContext : DbContext
+public partial class CiPlatformDbContext : DbContext
 {
-    public CipContext()
+    public CiPlatformDbContext()
     {
     }
 
-    public CipContext(DbContextOptions<CipContext> options)
+    public CiPlatformDbContext(DbContextOptions<CiPlatformDbContext> options)
         : base(options)
     {
     }
@@ -67,7 +67,7 @@ public partial class CipContext : DbContext
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:constr");
+        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:constr1");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -140,6 +140,8 @@ public partial class CipContext : DbContext
 
             entity.ToTable("city");
 
+            entity.HasIndex(e => e.CountryId, "IX_city_country_id");
+
             entity.Property(e => e.CityId).HasColumnName("city_id");
             entity.Property(e => e.CountryId).HasColumnName("country_id");
             entity.Property(e => e.CreatedAt)
@@ -204,6 +206,10 @@ public partial class CipContext : DbContext
 
             entity.ToTable("comment");
 
+            entity.HasIndex(e => e.MissionId, "IX_comment_mission_id");
+
+            entity.HasIndex(e => e.UserId, "IX_comment_user_id");
+
             entity.Property(e => e.CommentId).HasColumnName("comment_id");
             entity.Property(e => e.ApprovalStatus)
                 .HasMaxLength(20)
@@ -244,6 +250,8 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.ContactId);
 
             entity.ToTable("Contact_us");
+
+            entity.HasIndex(e => e.UserId, "IX_Contact_us_User_id");
 
             entity.Property(e => e.ContactId).HasColumnName("Contact_id");
             entity.Property(e => e.CreatedAt)
@@ -297,6 +305,10 @@ public partial class CipContext : DbContext
 
             entity.ToTable("favorite_mission");
 
+            entity.HasIndex(e => e.MissionId, "IX_favorite_mission_mission_id");
+
+            entity.HasIndex(e => e.UserId, "IX_favorite_mission_user_id");
+
             entity.Property(e => e.FavouriteMissionId).HasColumnName("favourite_mission_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -326,6 +338,8 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.GoalMissionId).HasName("PK__goal_mis__358E02C7CE2C8F2F");
 
             entity.ToTable("goal_mission");
+
+            entity.HasIndex(e => e.MissionId, "IX_goal_mission_mission_id");
 
             entity.Property(e => e.GoalMissionId).HasColumnName("goal_mission_id");
             entity.Property(e => e.CreatedAt)
@@ -359,6 +373,12 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.MissionId).HasName("PK__mission__B5419AB200EC0209");
 
             entity.ToTable("mission");
+
+            entity.HasIndex(e => e.CityId, "IX_mission_city_id");
+
+            entity.HasIndex(e => e.CountryId, "IX_mission_country_id");
+
+            entity.HasIndex(e => e.ThemeId, "IX_mission_theme_id");
 
             entity.Property(e => e.MissionId).HasColumnName("mission_id");
             entity.Property(e => e.Availability)
@@ -435,6 +455,10 @@ public partial class CipContext : DbContext
 
             entity.ToTable("mission_application");
 
+            entity.HasIndex(e => e.MissionId, "IX_mission_application_mission_id");
+
+            entity.HasIndex(e => e.UserId, "IX_mission_application_user_id");
+
             entity.Property(e => e.MissionApplicationId).HasColumnName("mission_application_id");
             entity.Property(e => e.AppliedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -474,6 +498,8 @@ public partial class CipContext : DbContext
 
             entity.ToTable("mission_document");
 
+            entity.HasIndex(e => e.MissionId, "IX_mission_document_mission_id");
+
             entity.Property(e => e.MissionDocumentId).HasColumnName("mission_document_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -509,6 +535,12 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.MissionInviteId).HasName("PK__mission___A97ED1586270F6A0");
 
             entity.ToTable("mission_invite");
+
+            entity.HasIndex(e => e.FromUserId, "IX_mission_invite_from_user_id");
+
+            entity.HasIndex(e => e.MissionId, "IX_mission_invite_mission_id");
+
+            entity.HasIndex(e => e.ToUserId, "IX_mission_invite_to_user_id");
 
             entity.Property(e => e.MissionInviteId).HasColumnName("mission_invite_id");
             entity.Property(e => e.CreatedAt)
@@ -546,6 +578,8 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.MissionMediaId).HasName("PK__mission___848A78E8E26D60E0");
 
             entity.ToTable("mission_media");
+
+            entity.HasIndex(e => e.MissionId, "IX_mission_media_mission_id");
 
             entity.Property(e => e.MissionMediaId).HasColumnName("mission_media_id");
             entity.Property(e => e.CreatedAt)
@@ -585,6 +619,10 @@ public partial class CipContext : DbContext
 
             entity.ToTable("mission_rating");
 
+            entity.HasIndex(e => e.MissionId, "IX_mission_rating_mission_id");
+
+            entity.HasIndex(e => e.UserId, "IX_mission_rating_user_id");
+
             entity.Property(e => e.MissionRatingId).HasColumnName("mission_rating_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -616,6 +654,10 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.MissionSkillId).HasName("PK__mission___827120081BA12214");
 
             entity.ToTable("mission_skill");
+
+            entity.HasIndex(e => e.MissionId, "IX_mission_skill_mission_id");
+
+            entity.HasIndex(e => e.SkillId, "IX_mission_skill_skill_id");
 
             entity.Property(e => e.MissionSkillId).HasColumnName("mission_skill_id");
             entity.Property(e => e.CreatedAt)
@@ -719,6 +761,10 @@ public partial class CipContext : DbContext
 
             entity.ToTable("story");
 
+            entity.HasIndex(e => e.MissionId, "IX_story_mission_id");
+
+            entity.HasIndex(e => e.UserId, "IX_story_user_id");
+
             entity.Property(e => e.StoryId).HasColumnName("story_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -771,6 +817,12 @@ public partial class CipContext : DbContext
 
             entity.ToTable("story_invite");
 
+            entity.HasIndex(e => e.FromUserId, "IX_story_invite_from_user_id");
+
+            entity.HasIndex(e => e.StoryId, "IX_story_invite_story_id");
+
+            entity.HasIndex(e => e.ToUserId, "IX_story_invite_to_user_id");
+
             entity.Property(e => e.StoryInviteId).HasColumnName("story_invite_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -808,6 +860,8 @@ public partial class CipContext : DbContext
 
             entity.ToTable("story_media");
 
+            entity.HasIndex(e => e.StoryId, "IX_story_media_story_id");
+
             entity.Property(e => e.StoryMediaId).HasColumnName("story_media_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -839,6 +893,10 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.TimesheetId).HasName("PK__timeshee__7BBF5068A8A7F339");
 
             entity.ToTable("timesheet");
+
+            entity.HasIndex(e => e.MissionId, "IX_timesheet_mission_id");
+
+            entity.HasIndex(e => e.UserId, "IX_timesheet_user_id");
 
             entity.Property(e => e.TimesheetId).HasColumnName("timesheet_id");
             entity.Property(e => e.Action).HasColumnName("action");
@@ -884,6 +942,10 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.UserId).HasName("PK__users__B9BE370FB6BE67B3");
 
             entity.ToTable("users");
+
+            entity.HasIndex(e => e.CityId, "IX_users_city_id");
+
+            entity.HasIndex(e => e.CountryId, "IX_users_country_id");
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Availability).HasMaxLength(50);
@@ -972,6 +1034,10 @@ public partial class CipContext : DbContext
             entity.HasKey(e => e.UserSkillId).HasName("PK__user_ski__FD3B576BB0526D5E");
 
             entity.ToTable("user_skill");
+
+            entity.HasIndex(e => e.SkillId, "IX_user_skill_skill_id");
+
+            entity.HasIndex(e => e.UserId, "IX_user_skill_user_id");
 
             entity.Property(e => e.UserSkillId).HasColumnName("user_skill_id");
             entity.Property(e => e.CreatedAt)
