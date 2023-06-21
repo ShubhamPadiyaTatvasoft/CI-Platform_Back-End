@@ -17,9 +17,9 @@ namespace CI_API.Data.Repository
 
         #region Dependency Injection of DbContext 
 
-        private readonly CipContext _cIDbContext;
+        private readonly CiPlatformDbContext _cIDbContext;
 
-        public LandingPageRepository(CipContext cIDbContext)
+        public LandingPageRepository(CiPlatformDbContext cIDbContext)
         {
             _cIDbContext = cIDbContext;
         }

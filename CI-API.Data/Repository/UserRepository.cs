@@ -21,9 +21,9 @@ namespace CI_API.Data.Repository
 
         #region Dependency Injection of DbContext 
 
-        private readonly CipContext cIDbContext;
+        private readonly CiPlatformDbContext cIDbContext;
 
-        public UserRepository(CipContext _cIDbContext)
+        public UserRepository(CiPlatformDbContext _cIDbContext)
         {
             cIDbContext = _cIDbContext;
         }
