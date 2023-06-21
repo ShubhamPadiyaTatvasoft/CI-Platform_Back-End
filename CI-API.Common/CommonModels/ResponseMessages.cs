@@ -37,6 +37,11 @@ namespace CI_API.Common.CommonModels
 
         #endregion
 
+        #region AdminPanel
+        public static string UserNotUpdated = "User data not updated please check details again and try after sometime";
+        public static string UserUpdatedSuccess = "User data updated successfully";
+        #endregion
+
         #endregion
     }
 }
