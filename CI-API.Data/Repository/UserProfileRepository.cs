@@ -22,39 +22,6 @@ namespace CI_API.Data.Repository
             cIDbContext = _cIDbContext;
         }
 
-        public async Task<JsonResult> GetCountriesList()
-        {
-            List<Country> countryList = await Task.FromResult(cIDbContext.Countries.ToList());
-            return new JsonResult(new apiResponse<List<Country>> { Data = countryList, Message = ResponseMessages.Success, StatusCode = responseStatusCode.Success, Result = true });
-        }
-
-        public async Task<JsonResult> GetCitiesList()
-        {
-            List<City> cityList = await Task.FromResult(cIDbContext.Cities.ToList());
-            return new JsonResult(new apiResponse<List<City>> { Data = cityList, Message = ResponseMessages.Success, StatusCode = responseStatusCode.Success, Result = true });
-        }
-        public async Task<JsonResult> GetCitiesList(long countryId)
-        {
-            List<City> cityList = await Task.FromResult(cIDbContext.Cities.Where(city => city.CountryId == countryId).ToList());
-            return new JsonResult(new apiResponse<List<City>> { Data = cityList, Message = ResponseMessages.Success, StatusCode = responseStatusCode.Success, Result = true });
-        }
-
-        public async Task<JsonResult> GetAvailability()
-        {
-            List<string> availability = new List<string> { };
-            availability.Add("Daily");
-            availability.Add("Weekly");
-            availability.Add("Monthly");
-            availability.Add("Yearly");
-            return new JsonResult(new apiResponse<List<string>> { Data = availability, Message = ResponseMessages.Success, StatusCode = responseStatusCode.Success, Result = true });
-        }
-
-        public async Task<JsonResult> GetSkillsList()
-        {
-            List<Skill> skillList = await Task.FromResult(cIDbContext.Skills.ToList());
-            return new JsonResult(new apiResponse<List<Skill>> { Data = skillList, Message = ResponseMessages.Success, StatusCode = responseStatusCode.Success, Result = true });
-        }
-
         public async Task<JsonResult> GetUserDetails(long userId)
         {
             User user;

@@ -10,11 +10,6 @@ namespace CI_API.Application.ServiceInterface
 {
     public interface IUserProfileService
     {
-        public Task<JsonResult> GetCountriesList();
-        public Task<JsonResult> GetCitiesList();
-        public Task<JsonResult> GetCitiesList(long countryId);
-        public Task<JsonResult> GetAvailability();
-        public Task<JsonResult> GetSkillsList();
         public Task<JsonResult> GetUserDetails(long userId);
         public Task<JsonResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel);
         public Task<JsonResult> ContactUs(ContactUsViewModel contact);

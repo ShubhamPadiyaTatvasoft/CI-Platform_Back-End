@@ -15,36 +15,6 @@ namespace CI_API.Controllers
             userProfileService = _userProfileService;
         }
 
-        [HttpGet("GetCountryList")]
-        public Task<JsonResult> GetCountriesList()
-        {
-            return userProfileService.GetCountriesList();
-        }
-
-        [HttpGet("GetCitiesList")]
-        public Task<JsonResult> GetCitiesList()
-        {
-            return userProfileService.GetCitiesList();
-        }
-
-        [HttpGet("GetCitiesListByCountryId")]
-        public Task<JsonResult> GetCitiesList(long countryId)
-        {
-            return userProfileService.GetCitiesList(countryId);
-        }
-
-        [HttpGet("GetAvailability")]
-        public Task<JsonResult> GetAvailability()
-        {
-            return userProfileService.GetAvailability();
-        }
-
-        [HttpGet("GetSkillsList")]
-        public Task<JsonResult> GetSkillsList()
-        {
-            return userProfileService.GetSkillsList();
-        }
-
         [HttpGet("GetUserDetails")]
         public Task<JsonResult> GetUserDetails(long userId)
         {

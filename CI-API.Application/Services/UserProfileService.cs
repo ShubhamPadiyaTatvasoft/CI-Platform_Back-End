@@ -19,31 +19,6 @@ namespace CI_API.Application.Services
             userProfileRepository = _userProfileRepository;
         }
 
-        public async Task<JsonResult> GetCountriesList()
-        {
-            return await userProfileRepository.GetCountriesList();
-        }
-
-        public async Task<JsonResult> GetCitiesList()
-        {
-            return await userProfileRepository.GetCitiesList();
-        }
-
-        public async Task<JsonResult> GetCitiesList(long countryId)
-        {
-            return await userProfileRepository.GetCitiesList(countryId);
-        }
-
-        public async Task<JsonResult> GetAvailability()
-        {
-            return await userProfileRepository.GetAvailability();
-        }
-
-        public async Task<JsonResult> GetSkillsList()
-        {
-            return await userProfileRepository.GetSkillsList();
-        }
-
         public async Task<JsonResult> GetUserDetails(long userId)
         {
             return await userProfileRepository.GetUserDetails(userId);
