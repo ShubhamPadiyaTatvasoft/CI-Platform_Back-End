@@ -43,7 +43,20 @@ namespace CI_API.Common.CommonModels
         public static string UserUpdatedSuccess = "User data updated successfully";
         public static string UserDeletedSuccess = "User data deleted successfully";
         #endregion
+        #region CommonMessage
+        public static string Success = "Success";
+        #endregion
 
+        #region UserDetails
+        public static string OldPasswordMismatch = "Old password does not match";
+        public static string PasswordChanged = "Password changed successfully";
+        public static string UserProfileUpdated = "Profile Updated Successfully";
+        #endregion
+
+        #region ContactUs
+        public static string ContactSuccess = "Message sent successfully";
+        public static string ContactError = "Error Occurred";
+        #endregion
         #endregion
     }
 }
