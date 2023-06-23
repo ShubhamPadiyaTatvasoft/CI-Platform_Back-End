@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace CI_API.Common.CommonModels
 {
-    public class StaticEnumCode
+    public class StaticCode
     {
-        public enum UserStatus
-        {
-            Active=1,
-            Inactive=0
-        }
-
+        public static bool Active = true;
+        public static bool InActive = false;
     }
 }

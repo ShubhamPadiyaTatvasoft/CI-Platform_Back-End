@@ -17,7 +17,7 @@ namespace CI_API.Core.ViewModel
         public long cityId { get; set; }
         public long phoneNumber { get; set; }
         public string role { get; set; }
-        public string status { get; set; }
+        public bool? status { get; set; }
         public string manager { get; set; }
 
     }

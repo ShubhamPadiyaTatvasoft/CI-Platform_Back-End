@@ -172,7 +172,6 @@ namespace CI_API.Data.Repository
                 {
                     return new JsonResult(new apiResponse<string> { Message = ResponseMessages.UserNotFound, StatusCode = responseStatusCode.NotFound, Result = false });
                 }
-
             }
             catch
             {
@@ -192,30 +191,16 @@ namespace CI_API.Data.Repository
                 {
                     if (userDetailViewModel.userId != 0)
                     {
-                        byte[] byteForPassword = Encoding.ASCII.GetBytes(userDetailViewModel.password);
-                        string encryptedPassword = Convert.ToBase64String(byteForPassword);
 
                         User? userHasTobeUpdated = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userDetailViewModel.userId).FirstOrDefault());
-
-                        userHasTobeUpdated.FirstName = userDetailViewModel.firstName;
-                        userHasTobeUpdated.LastName = userDetailViewModel.lastName;
-                        userHasTobeUpdated.Password = encryptedPassword;
-                        userHasTobeUpdated.Email = userDetailViewModel.email;
-                        userHasTobeUpdated.CountryId = userDetailViewModel.countryId;
-                        userHasTobeUpdated.CityId = userDetailViewModel.cityId;
-                        userHasTobeUpdated.PhoneNumber = userDetailViewModel.phoneNumber;
-                        userHasTobeUpdated.Role = userDetailViewModel.role;
-                        userHasTobeUpdated.Status = userDetailViewModel.status;
-                        if (userDetailViewModel.status == StaticEnumCode.UserStatus.Inactive.ToString())
+                        if (userHasTobeUpdated != null)
                         {
-                            userHasTobeUpdated.DeletedAt = null;
+                            return updateAddUser(userHasTobeUpdated, userDetailViewModel);
                         }
-                        userHasTobeUpdated.Manager = userDetailViewModel.manager;
-                        userHasTobeUpdated.UpdatedAt = DateTime.Now;
-
-                        cIDbContext.SaveChanges();
-
-                        return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserUpdatedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                        else
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.UserNotFound, StatusCode = responseStatusCode.NotFound, Result = false });
+                        }
                     }
 
                     else
@@ -227,35 +212,13 @@ namespace CI_API.Data.Repository
                         }
                         else
                         {
-                            byte[] byteForPassword = Encoding.ASCII.GetBytes(userDetailViewModel.password);
-                            string encryptedPassword = Convert.ToBase64String(byteForPassword);
-                            User user = new User()
-                            {
-
-                                FirstName = userDetailViewModel.firstName,
-                                LastName = userDetailViewModel.lastName,
-                                Email = userDetailViewModel.email,
-                                Password = encryptedPassword,
-                                PhoneNumber = userDetailViewModel.phoneNumber,
-                                CityId = userDetailViewModel.cityId,
-                                CountryId = userDetailViewModel.countryId,
-                                Role = userDetailViewModel.role,
-                                Status = userDetailViewModel.status,
-                                Manager = userDetailViewModel.manager,
-
-                            };
-                            cIDbContext.Add(user);
-                            cIDbContext.SaveChanges();
-                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.RegistrationSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                            return updateAddUser(userExist, userDetailViewModel);
                         }
                     }
-
-
                 }
                 else
                 {
                     return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserNotUpdated, StatusCode = responseStatusCode.RequestFailed, Result = false });
-
                 }
             }
             catch
@@ -279,7 +242,7 @@ namespace CI_API.Data.Repository
                     User? userHasTobeDeleted = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userId).FirstOrDefault());
 
                     userHasTobeDeleted.DeletedAt = DateTime.Now;
-                    userHasTobeDeleted.Status = StaticEnumCode.UserStatus.Inactive.ToString();
+                    userHasTobeDeleted.Status = StaticCode.InActive;
 
                     cIDbContext.SaveChanges();
 
@@ -296,6 +259,67 @@ namespace CI_API.Data.Repository
                 return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
 
             }
+        }
+        #endregion
+
+        #region userAddUpdate
+        private JsonResult updateAddUser(User userHasTobeUpdated,UserDetailViewModel userDetailViewModel)
+        {
+            try
+            {
+                byte[] byteForPassword = Encoding.ASCII.GetBytes(userDetailViewModel.password);
+                string encryptedPassword = Convert.ToBase64String(byteForPassword);
+                if (userDetailViewModel.userId != 0)
+                {
+                    userHasTobeUpdated.FirstName = userDetailViewModel.firstName;
+                    userHasTobeUpdated.LastName = userDetailViewModel.lastName;
+                    userHasTobeUpdated.Password = encryptedPassword;
+                    userHasTobeUpdated.Email = userDetailViewModel.email;
+                    userHasTobeUpdated.CountryId = userDetailViewModel.countryId;
+                    userHasTobeUpdated.CityId = userDetailViewModel.cityId;
+                    userHasTobeUpdated.PhoneNumber = userDetailViewModel.phoneNumber;
+                    userHasTobeUpdated.Role = userDetailViewModel.role;
+                    userHasTobeUpdated.Status = userDetailViewModel.status;
+                    if (userDetailViewModel.status == StaticCode.InActive)
+                    {
+                        userHasTobeUpdated.DeletedAt = null;
+                    }
+                    userHasTobeUpdated.Manager = userDetailViewModel.manager;
+                    userHasTobeUpdated.UpdatedAt = DateTime.Now;
+
+                    cIDbContext.SaveChanges();
+
+                    return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserUpdatedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+                else
+                {
+
+                    User user = new User()
+                    {
+
+                        FirstName = userDetailViewModel.firstName,
+                        LastName = userDetailViewModel.lastName,
+                        Email = userDetailViewModel.email,
+                        Password = encryptedPassword,
+                        PhoneNumber = userDetailViewModel.phoneNumber,
+                        CityId = userDetailViewModel.cityId,
+                        CountryId = userDetailViewModel.countryId,
+                        Role = userDetailViewModel.role,
+                        Status = userDetailViewModel.status,
+                        Manager = userDetailViewModel.manager,
+
+                    };
+                    cIDbContext.Add(user);
+                    cIDbContext.SaveChanges();
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.RegistrationSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+
         }
         #endregion
     }
