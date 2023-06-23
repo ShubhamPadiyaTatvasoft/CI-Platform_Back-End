@@ -17,11 +17,11 @@ namespace CI_API.Data.Repository
 
         #region Dependency Injection of DbContext 
 
-        private readonly CiPlatformDbContext _cIDbContext;
+        private readonly CiPlatformDbContext cIDbContext;
 
-        public AdminRepository(CiPlatformDbContext cIDbContext)
+        public AdminRepository(CiPlatformDbContext _cIDbContext)
         {
-            _cIDbContext = cIDbContext;
+            cIDbContext = _cIDbContext;
         }
         #endregion
 
@@ -34,13 +34,13 @@ namespace CI_API.Data.Repository
 
                 if (search != null)
                 {
-                    List<User> userData = _cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList();
+                    List<User> userData =await Task.FromResult(cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList());
 
                     return new JsonResult(new apiResponse<List<User>> { StatusCode = responseStatusCode.Success, Data = userData, Result = true });
                 }
                 else
                 {
-                    List<User> userData = _cIDbContext.Users.ToList();
+                    List<User> userData = await Task.FromResult(cIDbContext.Users.ToList());
                     return new JsonResult(new apiResponse<List<User>> { StatusCode = responseStatusCode.Success, Data = userData, Result = true });
                 }
             }
@@ -58,9 +58,12 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                List<Mission> AllMission = await Task.FromResult(_cIDbContext.Missions.ToList());
-                List<MissionTheme> AllMissionThemes = await Task.FromResult(_cIDbContext.MissionThemes.ToList());
-                List<MissionSkill> AllMissionSkills = await Task.FromResult(_cIDbContext.MissionSkills.ToList());
+                if (search != null)
+                {
+
+                List<Mission> AllMission = await Task.FromResult(cIDbContext.Missions.Where(M=>M.Title.Contains(search)||M.Theme.Title.Contains(search)).ToList());
+                List<MissionTheme> AllMissionThemes = await Task.FromResult(cIDbContext.MissionThemes.ToList());
+                List<MissionSkill> AllMissionSkills = await Task.FromResult(cIDbContext.MissionSkills.ToList());
 
                 LandingPageViewModel landingPageViewModel = new()
                 {
@@ -71,6 +74,23 @@ namespace CI_API.Data.Repository
                 };
 
                 return new JsonResult(new apiResponse<LandingPageViewModel> { StatusCode = responseStatusCode.Success, Data = landingPageViewModel, Result = true });
+                }
+                else
+                {
+                    List<Mission> AllMission = await Task.FromResult(cIDbContext.Missions.ToList());
+                    List<MissionTheme> AllMissionThemes = await Task.FromResult(cIDbContext.MissionThemes.ToList());
+                    List<MissionSkill> AllMissionSkills = await Task.FromResult(cIDbContext.MissionSkills.ToList());
+
+                    LandingPageViewModel landingPageViewModel = new()
+                    {
+                        missions = AllMission,
+                        missionThemes = AllMissionThemes,
+                        missionSkills = AllMissionSkills,
+
+                    };
+
+                    return new JsonResult(new apiResponse<LandingPageViewModel> { StatusCode = responseStatusCode.Success, Data = landingPageViewModel, Result = true });
+                }
             }
             catch
             {
@@ -86,8 +106,8 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                List<MissionTheme> AllMissionThemes = await Task.FromResult(_cIDbContext.MissionThemes.ToList());
-                List<Country> AllCountries = await Task.FromResult(_cIDbContext.Countries.ToList());
+                List<MissionTheme> AllMissionThemes = await Task.FromResult(cIDbContext.MissionThemes.ToList());
+                List<Country> AllCountries = await Task.FromResult(cIDbContext.Countries.ToList());
 
                 CityCountryThemeSkillViewModel cityCountryThemeSkillViewModel = new()
                 {
@@ -112,7 +132,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                List<City> AllCities = await Task.FromResult(_cIDbContext.Cities.Where(c => c.CountryId == countryId).ToList());
+                List<City> AllCities = await Task.FromResult(cIDbContext.Cities.Where(c => c.CountryId == countryId).ToList());
 
                 CityCountryThemeSkillViewModel cityCountryThemeSkillViewModel = new()
                 {
@@ -137,7 +157,7 @@ namespace CI_API.Data.Repository
             {
                 if (userId != null)
                 {
-                    User user = await Task.FromResult(_cIDbContext.Users.Where(U => U.UserId == userId).FirstOrDefault());
+                    User user = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userId).FirstOrDefault());
                     if (user != null)
                     {
                         return new JsonResult(new apiResponse<User> { StatusCode = responseStatusCode.Success, Data = user, Result = true });
@@ -165,37 +185,114 @@ namespace CI_API.Data.Repository
         #region UpdateUserData
         public async Task<JsonResult> updateUserData(UserDetailViewModel userDetailViewModel)
         {
-
-            if (userDetailViewModel != null)
+            try
             {
-                byte[] byteForPassword = Encoding.ASCII.GetBytes(userDetailViewModel.password);
-                string encryptedPassword = Convert.ToBase64String(byteForPassword);
 
-                User? userHasTobeUpdated =await Task.FromResult(_cIDbContext.Users.Where(U=>U.UserId==userDetailViewModel.userId).FirstOrDefault());
+                if (userDetailViewModel != null)
+                {
+                    if (userDetailViewModel.userId!=0 )
+                    {
+                        byte[] byteForPassword = Encoding.ASCII.GetBytes(userDetailViewModel.password);
+                        string encryptedPassword = Convert.ToBase64String(byteForPassword);
 
-                userHasTobeUpdated.FirstName = userDetailViewModel.firstName;
-                userHasTobeUpdated.LastName = userDetailViewModel.lastName;
-                userHasTobeUpdated.Password = encryptedPassword;
-                userHasTobeUpdated.Email = userDetailViewModel.email;
-                userHasTobeUpdated.CountryId = userDetailViewModel.countryId;
-                userHasTobeUpdated.CityId = userDetailViewModel.cityId;
-                userHasTobeUpdated.PhoneNumber = userDetailViewModel.phoneNumber;
-                userHasTobeUpdated.Role = userDetailViewModel.role;
-                userHasTobeUpdated.Status = userDetailViewModel.status;
-                userHasTobeUpdated.Manager = userDetailViewModel.manager;
-                userHasTobeUpdated.UpdatedAt = DateTime.Now;
+                        User? userHasTobeUpdated = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userDetailViewModel.userId).FirstOrDefault());
 
-                _cIDbContext.SaveChanges();
+                        userHasTobeUpdated.FirstName = userDetailViewModel.firstName;
+                        userHasTobeUpdated.LastName = userDetailViewModel.lastName;
+                        userHasTobeUpdated.Password = encryptedPassword;
+                        userHasTobeUpdated.Email = userDetailViewModel.email;
+                        userHasTobeUpdated.CountryId = userDetailViewModel.countryId;
+                        userHasTobeUpdated.CityId = userDetailViewModel.cityId;
+                        userHasTobeUpdated.PhoneNumber = userDetailViewModel.phoneNumber;
+                        userHasTobeUpdated.Role = userDetailViewModel.role;
+                        userHasTobeUpdated.Status = userDetailViewModel.status;
+                        if (userDetailViewModel.status == "1")
+                        {
+                            userHasTobeUpdated.DeletedAt = null;
+                        }
+                        userHasTobeUpdated.Manager = userDetailViewModel.manager;
+                        userHasTobeUpdated.UpdatedAt = DateTime.Now;
 
-                return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserUpdatedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                        cIDbContext.SaveChanges();
+
+                        return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserUpdatedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                    }
+
+                    else
+                    {
+                        User userExist = await Task.FromResult(cIDbContext.Users.Where(U => U.Email == userDetailViewModel.email).FirstOrDefault());
+                        if (userExist != null)
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.UserAlreadyExist, StatusCode = responseStatusCode.AlreadyExist, Result = false });
+                        }
+                        else
+                        {
+                            byte[] byteForPassword = Encoding.ASCII.GetBytes(userDetailViewModel.password);
+                            string encryptedPassword = Convert.ToBase64String(byteForPassword);
+                            User user = new User()
+                            {
+
+                                FirstName = userDetailViewModel.firstName,
+                                LastName = userDetailViewModel.lastName,
+                                Email = userDetailViewModel.email,
+                                Password = encryptedPassword,
+                                PhoneNumber = userDetailViewModel.phoneNumber,
+                                CityId=userDetailViewModel.cityId,
+                                CountryId=userDetailViewModel.countryId,
+                                Role=userDetailViewModel.role,
+                                Status=userDetailViewModel.status,
+                                Manager=userDetailViewModel.manager,
+
+                            };
+                            cIDbContext.Add(user);
+                            cIDbContext.SaveChanges();
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.RegistrationSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                        }
+                    }
+                   
+
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserNotUpdated, StatusCode = responseStatusCode.RequestFailed, Result = false });
+
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+
+        }
+        #endregion
+
+        #region DeleteUser
+        public async Task<JsonResult> deleteUser(long? userId)
+        {
+            try
+            {
+                if (userId != null)
+                {
+                    User? userHasTobeDeleted = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userId).FirstOrDefault());
+
+                    userHasTobeDeleted.DeletedAt = DateTime.Now;
+                    userHasTobeDeleted.Status = "0";
+
+                    cIDbContext.SaveChanges();
+
+                    return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserNotDeleted, StatusCode = responseStatusCode.RequestFailed, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
 
             }
-            else
-            {
-            return new JsonResult(new apiResponse<User> {Message=ResponseMessages.UserNotUpdated, StatusCode = responseStatusCode.RequestFailed, Result = false });
-
-            }
-
         }
         #endregion
     }

@@ -19,6 +19,8 @@ namespace CI_API.Data.Interface
         public Task<JsonResult> getListOfCityBasedOnCountry(long? countryId);
         public Task<JsonResult> getUser(long? userId);
         public Task<JsonResult> updateUserData(UserDetailViewModel userDetailViewModel);
+        public Task<JsonResult> deleteUser(long? userId);
+
 
         #endregion
     }

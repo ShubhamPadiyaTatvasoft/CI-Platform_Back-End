@@ -39,7 +39,9 @@ namespace CI_API.Common.CommonModels
 
         #region AdminPanel
         public static string UserNotUpdated = "User data not updated please check details again and try after sometime";
+        public static string UserNotDeleted = "User data not deleted please check details again and try after sometime";
         public static string UserUpdatedSuccess = "User data updated successfully";
+        public static string UserDeletedSuccess = "User data deleted successfully";
         #endregion
 
         #endregion

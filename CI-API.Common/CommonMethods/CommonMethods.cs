@@ -33,7 +33,7 @@ namespace CI_API.Common.CommonMethods
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = identity,
-                    Expires = DateTime.Now.AddMinutes(1),
+                    Expires = DateTime.Now.AddMinutes(30),
                     SigningCredentials = credetials,
                 };
 

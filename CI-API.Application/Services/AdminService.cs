@@ -64,6 +64,12 @@ namespace CI_API.Application.Services
         }
         #endregion
 
+        #region DeleteUser
+        public async Task<JsonResult> deleteUser(long? userId) {
+
+            return await AdminRepository.deleteUser(userId);
+        }
+        #endregion
 
     }
 }
