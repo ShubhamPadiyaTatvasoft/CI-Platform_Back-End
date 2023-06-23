@@ -241,12 +241,20 @@ namespace CI_API.Data.Repository
                    
                     User? userHasTobeDeleted = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userId).FirstOrDefault());
 
-                    userHasTobeDeleted.DeletedAt = DateTime.Now;
-                    userHasTobeDeleted.Status = StaticCode.InActive;
+                    if (userHasTobeDeleted != null)
+                    {
+                        userHasTobeDeleted.DeletedAt = DateTime.Now;
+                        userHasTobeDeleted.Status = StaticCode.InActive;
 
-                    cIDbContext.SaveChanges();
+                        cIDbContext.SaveChanges();
 
-                    return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                        return new JsonResult(new apiResponse<User> { Message = ResponseMessages.UserDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.UserNotFound, StatusCode = responseStatusCode.NotFound, Result = false });
+                    }
+                   
 
                 }
                 else
