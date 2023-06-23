@@ -1002,8 +1002,6 @@ public partial class CiPlatformDbContext : DbContext
                 .HasDefaultValueSql("(user_name())")
                 .HasColumnName("role");
             entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .IsUnicode(false)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("status");
             entity.Property(e => e.Title)

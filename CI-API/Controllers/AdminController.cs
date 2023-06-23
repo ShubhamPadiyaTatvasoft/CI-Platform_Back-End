@@ -99,8 +99,23 @@ namespace CI_API.Controllers
             {
                 return await AdminService.updateUserData(userDetailViewModel);
 
-                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
-                //return await AdminService.
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+
+
+
+        #region DeleteUserData
+
+        [Authorize]
+        [HttpPost("DeleteUserData")]
+        public async Task<JsonResult> deleteUserData([FromBody] long? userId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.deleteUser(userId);
             }
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
