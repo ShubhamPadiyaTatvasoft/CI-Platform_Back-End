@@ -34,7 +34,7 @@ namespace CI_API.Data.Repository
 
                 if (search != null)
                 {
-                    List<User> userData =await Task.FromResult(cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList());
+                    List<User> userData = await Task.FromResult(cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList());
 
                     return new JsonResult(new apiResponse<List<User>> { StatusCode = responseStatusCode.Success, Data = userData, Result = true });
                 }
@@ -61,19 +61,19 @@ namespace CI_API.Data.Repository
                 if (search != null)
                 {
 
-                List<Mission> AllMission = await Task.FromResult(cIDbContext.Missions.Where(M=>M.Title.Contains(search)||M.Theme.Title.Contains(search)).ToList());
-                List<MissionTheme> AllMissionThemes = await Task.FromResult(cIDbContext.MissionThemes.ToList());
-                List<MissionSkill> AllMissionSkills = await Task.FromResult(cIDbContext.MissionSkills.ToList());
+                    List<Mission> AllMission = await Task.FromResult(cIDbContext.Missions.Where(M => M.Title.Contains(search) || M.Theme.Title.Contains(search)).ToList());
+                    List<MissionTheme> AllMissionThemes = await Task.FromResult(cIDbContext.MissionThemes.ToList());
+                    List<MissionSkill> AllMissionSkills = await Task.FromResult(cIDbContext.MissionSkills.ToList());
 
-                LandingPageViewModel landingPageViewModel = new()
-                {
-                    missions = AllMission,
-                    missionThemes = AllMissionThemes,
-                    missionSkills = AllMissionSkills,
+                    LandingPageViewModel landingPageViewModel = new()
+                    {
+                        missions = AllMission,
+                        missionThemes = AllMissionThemes,
+                        missionSkills = AllMissionSkills,
 
-                };
+                    };
 
-                return new JsonResult(new apiResponse<LandingPageViewModel> { StatusCode = responseStatusCode.Success, Data = landingPageViewModel, Result = true });
+                    return new JsonResult(new apiResponse<LandingPageViewModel> { StatusCode = responseStatusCode.Success, Data = landingPageViewModel, Result = true });
                 }
                 else
                 {
@@ -190,7 +190,7 @@ namespace CI_API.Data.Repository
 
                 if (userDetailViewModel != null)
                 {
-                    if (userDetailViewModel.userId!=0 )
+                    if (userDetailViewModel.userId != 0)
                     {
                         byte[] byteForPassword = Encoding.ASCII.GetBytes(userDetailViewModel.password);
                         string encryptedPassword = Convert.ToBase64String(byteForPassword);
@@ -206,7 +206,7 @@ namespace CI_API.Data.Repository
                         userHasTobeUpdated.PhoneNumber = userDetailViewModel.phoneNumber;
                         userHasTobeUpdated.Role = userDetailViewModel.role;
                         userHasTobeUpdated.Status = userDetailViewModel.status;
-                        if (userDetailViewModel.status == StaticEnumCode.UserStatusInActive)
+                        if (userDetailViewModel.status == StaticEnumCode.UserStatus.Inactive.ToString())
                         {
                             userHasTobeUpdated.DeletedAt = null;
                         }
@@ -237,11 +237,11 @@ namespace CI_API.Data.Repository
                                 Email = userDetailViewModel.email,
                                 Password = encryptedPassword,
                                 PhoneNumber = userDetailViewModel.phoneNumber,
-                                CityId=userDetailViewModel.cityId,
-                                CountryId=userDetailViewModel.countryId,
-                                Role=userDetailViewModel.role,
-                                Status=userDetailViewModel.status,
-                                Manager=userDetailViewModel.manager,
+                                CityId = userDetailViewModel.cityId,
+                                CountryId = userDetailViewModel.countryId,
+                                Role = userDetailViewModel.role,
+                                Status = userDetailViewModel.status,
+                                Manager = userDetailViewModel.manager,
 
                             };
                             cIDbContext.Add(user);
@@ -249,7 +249,7 @@ namespace CI_API.Data.Repository
                             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.RegistrationSuccess, StatusCode = responseStatusCode.Success, Result = true });
                         }
                     }
-                   
+
 
                 }
                 else
@@ -269,14 +269,17 @@ namespace CI_API.Data.Repository
         #region DeleteUser
         public async Task<JsonResult> deleteUser(long? userId)
         {
+
             try
             {
+
                 if (userId != null)
                 {
+                   
                     User? userHasTobeDeleted = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userId).FirstOrDefault());
 
                     userHasTobeDeleted.DeletedAt = DateTime.Now;
-                    userHasTobeDeleted.Status = StaticEnumCode.UserStatusInActive;
+                    userHasTobeDeleted.Status = StaticEnumCode.UserStatus.Inactive.ToString();
 
                     cIDbContext.SaveChanges();
 

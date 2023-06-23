@@ -8,8 +8,11 @@ namespace CI_API.Common.CommonModels
 {
     public class StaticEnumCode
     {
-        public static string UserStatusInActive = "0";
-        public static string UserStatusActive = "1";
+        public enum UserStatus
+        {
+            Active=1,
+            Inactive=0
+        }
 
     }
 }
