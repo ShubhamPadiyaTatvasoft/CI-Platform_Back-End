@@ -206,7 +206,7 @@ namespace CI_API.Data.Repository
                         userHasTobeUpdated.PhoneNumber = userDetailViewModel.phoneNumber;
                         userHasTobeUpdated.Role = userDetailViewModel.role;
                         userHasTobeUpdated.Status = userDetailViewModel.status;
-                        if (userDetailViewModel.status == "1")
+                        if (userDetailViewModel.status == StaticEnumCode.UserStatusInActive)
                         {
                             userHasTobeUpdated.DeletedAt = null;
                         }
@@ -276,7 +276,7 @@ namespace CI_API.Data.Repository
                     User? userHasTobeDeleted = await Task.FromResult(cIDbContext.Users.Where(U => U.UserId == userId).FirstOrDefault());
 
                     userHasTobeDeleted.DeletedAt = DateTime.Now;
-                    userHasTobeDeleted.Status = "0";
+                    userHasTobeDeleted.Status = StaticEnumCode.UserStatusInActive;
 
                     cIDbContext.SaveChanges();
 
