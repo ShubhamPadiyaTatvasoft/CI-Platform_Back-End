@@ -34,6 +34,7 @@ namespace CI_API.Common.CommonModels
 
         #region CommonErrorMessage
         public static string InternalServerError = "Internal Server error";
+        public static string Success = "Method Success";
 
         #endregion
 
@@ -42,6 +43,12 @@ namespace CI_API.Common.CommonModels
         public static string UserNotDeleted = "User data not deleted please check details again and try after sometime";
         public static string UserUpdatedSuccess = "User data updated successfully";
         public static string UserDeletedSuccess = "User data deleted successfully";
+        #endregion
+
+        #region
+        public static string FavMissionSuccess = "Favourite Mission Change Successfully";
+        public static string RecommendedSuccess = "Email Has Been Sent Successfully";
+        public static string InvalidData = "Data Invalid";
         #endregion
 
         #endregion

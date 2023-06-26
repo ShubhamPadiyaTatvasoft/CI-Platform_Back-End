@@ -1,4 +1,6 @@
 ﻿using CI_API.Application.ServiceInterface;
+using CI_API.Common.CommonModels;
+using CI_API.Core.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,5 +30,41 @@ namespace CI_API.Controllers
         }
         #endregion
 
+        #region
+        [HttpPost("MissionCardsData")]
+        public async Task<JsonResult> GetMissionData([FromBody]GetMissionParamViewModel landingPageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                return await landingPageService.GetMissionCards(landingPageViewModel);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            
+        }
+        #endregion
+
+        #region
+        [HttpPost("FavMissionUpdate")]
+        public async Task<JsonResult> FavMission(long MissionId , long UserId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await landingPageService.FavMissionService(MissionId, UserId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region
+        [HttpPost("RecommendedMission")]
+        public async Task<JsonResult> RecommendedMissionCall(long MissionId, long FromUserId, long ToUserId, string Toemail)
+        {
+            if (ModelState.IsValid)
+            {
+                return await landingPageService.RecommendedMissionService(MissionId, FromUserId, ToUserId, Toemail);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
     }
 }
