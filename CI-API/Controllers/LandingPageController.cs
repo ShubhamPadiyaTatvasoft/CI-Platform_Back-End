@@ -34,12 +34,18 @@ namespace CI_API.Controllers
         [HttpPost("MissionCardsData")]
         public async Task<JsonResult> GetMissionData([FromBody]GetMissionParamViewModel landingPageViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                return await landingPageService.GetMissionCards(landingPageViewModel);
+                if (ModelState.IsValid)
+                {
+                    return await landingPageService.GetMissionCards(landingPageViewModel);
+                }
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
             }
-            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
-            
+            catch (Exception)
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
         }
         #endregion
 
@@ -47,11 +53,18 @@ namespace CI_API.Controllers
         [HttpPost("FavMissionUpdate")]
         public async Task<JsonResult> FavMission(long MissionId , long UserId)
         {
-            if (ModelState.IsValid)
+            try
             {
-                return await landingPageService.FavMissionService(MissionId, UserId);
+                if (ModelState.IsValid)
+                {
+                    return await landingPageService.FavMissionService(MissionId, UserId);
+                }
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
             }
-            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            catch (Exception)
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
         }
         #endregion
 
@@ -59,11 +72,18 @@ namespace CI_API.Controllers
         [HttpPost("RecommendedMission")]
         public async Task<JsonResult> RecommendedMissionCall(long MissionId, long FromUserId, long ToUserId, string Toemail)
         {
-            if (ModelState.IsValid)
+            try
             {
-                return await landingPageService.RecommendedMissionService(MissionId, FromUserId, ToUserId, Toemail);
+                if (ModelState.IsValid)
+                {
+                    return await landingPageService.RecommendedMissionService(MissionId, FromUserId, ToUserId, Toemail);
+                }
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
             }
-            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            catch (Exception)
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
         }
         #endregion
     }
