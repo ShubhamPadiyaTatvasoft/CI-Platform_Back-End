@@ -21,7 +21,7 @@ namespace CI_API.Common.CommonMethods
             try
             {
                 var jwtTokenHaandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes("hellociplateform...");
+                var key = Encoding.ASCII.GetBytes("CI_PlatForm_Secreat_Key_Is_Demo_With256Bits");
 
                 var identity = new ClaimsIdentity(new Claim[]
                 {
