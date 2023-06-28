@@ -34,6 +34,7 @@ namespace CI_API.Common.CommonModels
 
         #region CommonErrorMessage
         public static string InternalServerError = "Internal Server error";
+        
 
         #endregion
 
@@ -43,6 +44,8 @@ namespace CI_API.Common.CommonModels
         public static string UserUpdatedSuccess = "User data updated successfully";
         public static string UserDeletedSuccess = "User data deleted successfully";
         #endregion
+
+        
 
         #region Volunteer-Mission
         public static string CommentDone = "Your comment has been sent successfully.";
@@ -55,7 +58,7 @@ namespace CI_API.Common.CommonModels
         public static string IdNotFound = "Invalid Data";
         public static string Usersuccess = "successfully get All User Data !";
         public static string SentEmailRecommanded = "Email sent successfully go to your Gmail(📧) ";
-       
+        #endregion
 
         #region CommonMessage
         public static string Success = "Success";
@@ -73,7 +76,7 @@ namespace CI_API.Common.CommonModels
         #endregion
 
         #region
-        public static string FavMissionSuccess = "Favourite Mission Change Successfully";
+        public static string FavMissionSuccess = "Favourite Mission Change Successfully"; 
         public static string RecommendedSuccess = "Email Has Been Sent Successfully";
         public static string InvalidData = "Data Invalid";
         #endregion

@@ -1,5 +1,6 @@
 ﻿using CI_API.Application.ServiceInterface;
 using CI_API.Common.CommonModels;
+using CI_API.Core.ViewModel;
 using CI_API.Data.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,6 +29,27 @@ namespace CI_API.Application.Services
 
             //return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
 
+        }
+        #endregion
+
+        #region MissionCards 
+        public async Task<JsonResult> GetMissionCards(GetMissionParamViewModel missionData)
+        {
+            return await _LandingPageRepository.GetMissionCards(missionData);
+        }
+        #endregion
+
+        #region
+        public async Task<JsonResult> FavMissionService(long MissionId , long UserId)
+        {
+            return await _LandingPageRepository.FavMissionUpdated(MissionId , UserId);
+        }
+        #endregion
+
+        #region 
+        public async Task<JsonResult> RecommendedMissionService(long MissionId, long FromUserId, long ToUserId, string Toemail)
+        {
+            return await _LandingPageRepository.RecommendedMission(MissionId, FromUserId, ToUserId, Toemail);
         }
         #endregion
     }
