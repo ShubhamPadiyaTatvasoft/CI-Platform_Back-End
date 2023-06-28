@@ -62,8 +62,11 @@ builder.Services.AddScoped<ILandingPageService, LandingPageService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+builder.Services.AddScoped<ICommonRepository, CommonRepository>();
+builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<ISqlHelperRepository, SqlHelperRepository>();
-
 builder.Services.AddScoped<ILandingPageRepository, LandingPageRepository>();
 builder.Services.AddAuthentication(x =>
 {
