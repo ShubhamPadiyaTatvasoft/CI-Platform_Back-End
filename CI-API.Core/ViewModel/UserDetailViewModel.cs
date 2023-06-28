@@ -19,6 +19,7 @@ namespace CI_API.Core.ViewModel
         public string role { get; set; }
         public bool? status { get; set; }
         public string manager { get; set; }
+        public string? avatar { get; set; }
 
     }
 }
