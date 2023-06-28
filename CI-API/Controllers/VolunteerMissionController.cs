@@ -1,10 +1,12 @@
 ﻿using CI_API.Application.ServiceInterface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CI_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
 
     public class VolunteerMissionController : Controller
     {
@@ -64,13 +66,5 @@ namespace CI_API.Controllers
         {
             return await VolunteerMissionService.RecommandedCoworker(Email, missionId, userId);
         }
-
-
-
-
-
-
-
-
     }
 }

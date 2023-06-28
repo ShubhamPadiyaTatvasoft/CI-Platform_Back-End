@@ -31,9 +31,9 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                var isMissionId =await Task.FromResult(_cIDbContext.Missions.Where(m => m.MissionId == missionId).FirstOrDefault()) ;
+                var missionData =await Task.FromResult(_cIDbContext.Missions.Where(m => m.MissionId == missionId).FirstOrDefault()) ;
 
-                if (isMissionId != null)
+                if (missionData != null)
                 {
                     var data1 = await Task.FromResult(from mission in _cIDbContext.Missions
                                                       join city in _cIDbContext.Cities on mission.CityId equals city.CityId
@@ -198,8 +198,8 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                var ismidOrNot =await Task.FromResult(_cIDbContext.Missions.Where(m => m.MissionId == missionId).FirstOrDefault());
-                if (ismidOrNot != null)
+                var mission =await Task.FromResult(_cIDbContext.Missions.Where(m => m.MissionId == missionId).FirstOrDefault());
+                if (mission != null)
                 {
                     var mid = await Task.FromResult(_cIDbContext.FavoriteMissions.Where(x => x.UserId == userId && x.MissionId == missionId).FirstOrDefault());
                     if (mid == null)

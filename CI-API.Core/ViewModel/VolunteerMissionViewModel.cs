@@ -40,12 +40,12 @@ namespace CI_API.Core.ViewModel
         public string? commentText { get; set; }
         public string? approvalStatus { get; set; }
         public bool? IsFavMission { get; set; }
-        public List<DocDetail> docsPath { get; set; }  
+        public List<DocumentDetail> docsPath { get; set; }  
         public string? imgPath { get; set; }        
         public List<Comment> comments { get; set; }
     }
 
-    public class DocDetail
+    public class DocumentDetail
     {
        
         public string Name { get; set; }
