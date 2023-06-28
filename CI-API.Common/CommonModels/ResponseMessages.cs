@@ -44,6 +44,21 @@ namespace CI_API.Common.CommonModels
         public static string UserDeletedSuccess = "User data deleted successfully";
         #endregion
 
+        #region Volunteer-Mission
+        public static string CommentDone = "Your comment has been sent successfully.";
+        public static string CommentNotDone = "Please Apply this mission";
+        public static string AddToFavourite = "This Mission Is  favourite ";
+        public static string RemoveToFavourite = "Remove favourite";
+        public static string RecommandedMission = "This Mission is shared With Your Friend"; 
+        public static string ApplyMission = "successfully Applied The Mission";
+        public static string AllMissionSuccess = "successfully get All Mission Data !";
+        public static string IdNotFound = "Invalid Data";
+        public static string Usersuccess = "successfully get All User Data !";
+        public static string SentEmailRecommanded = "Email sent successfully go to your Gmail(📧) ";
+       
+
+        #endregion
+
         #endregion
     }
 }
