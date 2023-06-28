@@ -34,7 +34,7 @@ namespace CI_API.Controllers
         }
 
         [HttpPost("UpdateUserDetails")]
-        public Task<JsonResult> UpdateUserDetails2([FromForm] UserDetailsViewModel userDetails)
+        public Task<JsonResult> UpdateUserDetails2([FromBody] UserDetailsViewModel userDetails)
         {
             return userProfileService.UpdateUserDetails(userDetails);
         }

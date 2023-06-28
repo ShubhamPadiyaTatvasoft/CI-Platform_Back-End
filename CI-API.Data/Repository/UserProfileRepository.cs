@@ -92,7 +92,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                User u = cIDbContext.Users.Where(user => user.UserId == long.Parse(userDetails.UserId)).FirstOrDefault();
+                User u = cIDbContext.Users.Where(user => user.UserId == userDetails.UserId).FirstOrDefault();
                 if (u == null)
                 {
                     return new JsonResult(new apiResponse<string> { Message = ResponseMessages.UserNotFound, StatusCode = responseStatusCode.NotFound, Result = false });
@@ -106,28 +106,22 @@ namespace CI_API.Data.Repository
                 u.Department = userDetails.Department;
                 u.ProfileText = userDetails.ProfileText;
                 u.WhyIVolunteer = userDetails.WhyVolunteer;
-                u.CountryId = long.Parse(userDetails.CountryId);
-                u.CityId = long.Parse(userDetails.CityId);
+                u.CountryId = userDetails.CountryId;
+                u.CityId = userDetails.CityId;
                 u.Availability = userDetails.Availability;
                 u.LinkedInUrl = userDetails.LinkedIn;
-                if (userDetails.Image != null)
+
+                if (userDetails.Avatar != null)
                 {
-                    string folder = "D:/Project/CI-Platform/CI-Platform_Front-End/CI-Platform_Front-End/src/assets/Images/Avatar";
-                    string fileName = Guid.NewGuid().ToString() + '_' + userDetails.Image.FileName;
-                    path = Path.Combine(folder, fileName);
-                    using (var fileStream = new FileStream(path, FileMode.Create))
-                    {
-                        userDetails.Image.CopyTo(fileStream);
-                    }
-                    u.Avatar = path;
+                    u.Avatar = userDetails.Avatar;
                 }
                 cIDbContext.Update(u);
-                if (userDetails.Skills !=null)
+                List<UserSkill> userskills = cIDbContext.UserSkills.Where(skill => skill.UserId == userDetails.UserId).ToList();
+                cIDbContext.UserSkills.RemoveRange(userskills);
+                if (userDetails.Skills !="")
                 {
-                    List<UserSkill> userskills=cIDbContext.UserSkills.Where(skill=>skill.UserId==long.Parse(userDetails.UserId)).ToList();
-                    cIDbContext.UserSkills.RemoveRange(userskills);
                     List<int> skillIds = userDetails.Skills.Split(',').Select(int.Parse).ToList();
-                    skillIds.ForEach(skillId => { UserSkill u = new UserSkill() { SkillId = skillId, UserId = long.Parse(userDetails.UserId) }; cIDbContext.Add(u); });
+                    skillIds.ForEach(skillId => { UserSkill u = new UserSkill() { SkillId = skillId, UserId = userDetails.UserId }; cIDbContext.Add(u); });
 
                 }
                 cIDbContext.SaveChanges();
