@@ -92,5 +92,45 @@ namespace CI_API.Common.CommonMethods
 
         #endregion
 
+        #region Recommanded Co Worker
+        public static string RecommandedCoWorkerEmail(string Email, long missionId)
+        {
+            UriBuilder builder = new();
+            builder.Scheme = "http";
+            builder.Host = "localhost";
+            builder.Port = 4200;
+            builder.Path = "/MissionVolunteer";
+            builder.Query = "mid=" + missionId;
+            var resetLink = builder.ToString();
+            var fromAddress = new MailAddress("charulpatel2120@gmail.com", "CI Platform");
+            var toAddress = new MailAddress(Email);
+            var subject = "Recommanded By Co Worker";
+            var body = $"<h3> Your Friend Send Recommanded mission For you </h3> <br /> this link is valid till 15 min   <br /><a href='{resetLink}'><h3>Click here</h3></a>";
+            var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+            try
+            {
+                var smtpClient = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential("charulpatel2120@gmail.com", "zpxkqdrmqlfmsvjk"),
+                    EnableSsl = true
+                };
+                smtpClient.Send(message);
+                return "Email was sent";
+            }
+            catch
+            {
+                return "Email not sent";
+
+            }
+        }
+
+        #endregion
+
     }
 }
