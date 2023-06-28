@@ -31,11 +31,11 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                var missionData =await Task.FromResult(_cIDbContext.Missions.Where(m => m.MissionId == missionId).FirstOrDefault()) ;
+                var missionData =await Task.FromResult(_cIDbContext.Missions.Where(m => m.MissionId == missionId)) ;
 
                 if (missionData != null)
                 {
-                    var data1 = await Task.FromResult(from mission in _cIDbContext.Missions
+                    var data1 = await Task.FromResult(from mission in missionData
                                                       join city in _cIDbContext.Cities on mission.CityId equals city.CityId
                                                       join contry in _cIDbContext.Countries on mission.CountryId equals contry.CountryId
                                                       join theme in _cIDbContext.MissionThemes on mission.ThemeId equals theme.MissionThemeId
