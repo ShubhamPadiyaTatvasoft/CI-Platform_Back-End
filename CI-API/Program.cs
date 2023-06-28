@@ -79,7 +79,7 @@ builder.Services.AddAuthentication(x =>
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("hellociplateform...")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("CI_PlatForm_Secreat_Key_Is_Demo_With256Bits")),
         ValidateAudience = false,
         ValidateIssuer = false,
         ClockSkew = TimeSpan.Zero
