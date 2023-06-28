@@ -43,6 +43,7 @@ namespace CI_API.Common.CommonModels
         public static string UserUpdatedSuccess = "User data updated successfully";
         public static string UserDeletedSuccess = "User data deleted successfully";
         #endregion
+
         #region CommonMessage
         public static string Success = "Success";
         #endregion
@@ -57,6 +58,14 @@ namespace CI_API.Common.CommonModels
         public static string ContactSuccess = "Message sent successfully";
         public static string ContactError = "Error Occurred";
         #endregion
+
+        #region
+        public static string FavMissionSuccess = "Favourite Mission Change Successfully";
+        public static string RecommendedSuccess = "Email Has Been Sent Successfully";
+        public static string InvalidData = "Data Invalid";
+        #endregion
+
+
         #endregion
     }
 }

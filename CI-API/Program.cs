@@ -66,6 +66,7 @@ builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<ICommonRepository, CommonRepository>();
 builder.Services.AddScoped<ICommonService, CommonService>();
+builder.Services.AddScoped<ISqlHelperRepository, SqlHelperRepository>();
 builder.Services.AddScoped<ILandingPageRepository, LandingPageRepository>();
 builder.Services.AddAuthentication(x =>
 {
@@ -81,7 +82,7 @@ builder.Services.AddAuthentication(x =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("hellociplateform...")),
         ValidateAudience = false,
         ValidateIssuer = false,
-        ClockSkew=TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero
     };
 });
 var app = builder.Build();
