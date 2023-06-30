@@ -71,5 +71,27 @@ namespace CI_API.Application.Services
         }
         #endregion
 
+
+        #region AddUpdateMission
+        public async Task<JsonResult> addUpdateMission(MissionDataViewModel missionDataViewModel)
+        {
+            return await AdminRepository.addUpdateMission(missionDataViewModel);
+        }
+        #endregion
+
+        #region GetMissionDataFromId
+        public async Task<JsonResult> getMissionDataFromId(long? missionId)
+        {
+            return await AdminRepository.getMissionDataFromId(missionId);
+        }
+        #endregion 
+        
+        #region DeleteMission
+        public async Task<JsonResult> deleteMission(long? missionId)
+        {
+            return await AdminRepository.deleteMission(missionId);
+        }
+        #endregion
+
     }
 }

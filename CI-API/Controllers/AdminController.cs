@@ -21,6 +21,9 @@ namespace CI_API.Controllers
         }
         #endregion
 
+
+        #region User
+
         #region getAllUser
 
         [Authorize]
@@ -44,32 +47,6 @@ namespace CI_API.Controllers
             if (ModelState.IsValid)
             {
                 return await AdminService.GetAllMission(search.search);
-            }
-            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
-        }
-        #endregion
-
-        #region GetListOfCityCountryThemeSkills
-        [Authorize]
-        [HttpGet("GetListOfCityCountryThemeSkills")]
-        public async Task<JsonResult> getListOfCityCountryThemeSkills()
-        {
-            if (ModelState.IsValid)
-            {
-                return await AdminService.getListOfCountryTheme();
-            }
-            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
-        }
-        #endregion
-
-        #region GetListOfCityBasedOnCountry
-        [Authorize]
-        [HttpPost("GetListOfCityBasedOnCountry")]
-        public async Task<JsonResult> getListOfCityBasedOnCountry([FromBody] long? countryId)
-        {
-            if (ModelState.IsValid)
-            {
-                return await AdminService.getListOfCityBasedOnCountry(countryId);
             }
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
@@ -104,9 +81,6 @@ namespace CI_API.Controllers
         }
         #endregion
 
-
-
-
         #region DeleteUserData
 
         [Authorize]
@@ -120,5 +94,69 @@ namespace CI_API.Controllers
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
         #endregion
+
+        #endregion
+
+        #region Mission
+
+        #region AddUpdateMission
+        [Authorize]
+        [HttpPost("AddUpdateMission")]
+        public async Task<JsonResult> addUpdateMission([FromBody] MissionDataViewModel missionDataViewModel)
+        {
+            return await AdminService.addUpdateMission(missionDataViewModel);
+        }
+        #endregion
+
+        #region GetMissionDataFromId
+        [Authorize]
+        [HttpPost("GetMissionDataFromId")]
+        public async Task<JsonResult> getMissionDataFromId([FromBody] long? missionId)
+        {
+            return await AdminService.getMissionDataFromId(missionId);
+        }
+        #endregion
+
+        #region DeleteMission
+        [Authorize]
+        [HttpPost("DeleteMission")]
+        public async Task<JsonResult> deleteMission([FromBody] long? missionId)
+        {
+            return await AdminService.deleteMission(missionId);
+        }
+        #endregion
+
+        #endregion
+
+        #region common
+
+        #region GetListOfCityCountryThemeSkills
+        [Authorize]
+        [HttpGet("GetListOfCityCountryThemeSkills")]
+        public async Task<JsonResult> getListOfCityCountryThemeSkills()
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.getListOfCountryTheme();
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region GetListOfCityBasedOnCountry
+        [Authorize]
+        [HttpPost("GetListOfCityBasedOnCountry")]
+        public async Task<JsonResult> getListOfCityBasedOnCountry([FromBody] long? countryId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.getListOfCityBasedOnCountry(countryId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #endregion
+
     }
 }
