@@ -9,8 +9,12 @@ namespace CI_API.Core.ViewModel
 {
     public class LandingPageViewModel
     {
-        public List<Mission> missions { get; set; }
-        public List<MissionSkill> missionSkills { get; set; }
-        public List<MissionTheme> missionThemes { get; set; }
+        public Mission? mission { get; set; }
+        public List<MissionSkill>? missionSkills { get; set; }
+        public List<MissionDocument>? missionDocuments{ get; set; }
+        public List<MissionTheme>? missionThemes { get; set; }
+        public List<Mission>? missions { get; set; }
+        public List<MissionMedium>? missionMedia { get; set; }
+        public GoalMission? goalMissions{ get; set; }
     }
 }

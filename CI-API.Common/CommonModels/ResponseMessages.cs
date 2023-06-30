@@ -8,6 +8,8 @@ namespace CI_API.Common.CommonModels
 {
     public class ResponseMessages
     {
+
+        
         #region ResponseMessages
 
         #region Registration
@@ -39,13 +41,22 @@ namespace CI_API.Common.CommonModels
         #endregion
 
         #region AdminPanel
+        #region User
         public static string UserNotUpdated = "User data not updated please check details again and try after sometime";
         public static string UserNotDeleted = "User data not deleted please check details again and try after sometime";
         public static string UserUpdatedSuccess = "User data updated successfully";
         public static string UserDeletedSuccess = "User data deleted successfully";
         #endregion
+        #region Mission
+        public static string MissionAddedSuccessfully = "New mission added successfully";
+        public static string MissionUpdatedSuccessfully = "Mission updated successfully";
+        public static string MissionDeletedSuccessfully = "Mission deleted successfully";
+        public static string MissionNotUpdatedSuccessfully = "Mission not updated ";
 
-        
+        #endregion
+        #endregion
+
+
 
         #region Volunteer-Mission
         public static string CommentDone = "Your comment has been sent successfully.";
