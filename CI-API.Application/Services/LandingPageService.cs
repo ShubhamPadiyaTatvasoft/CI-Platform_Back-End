@@ -52,5 +52,12 @@ namespace CI_API.Application.Services
             return await _LandingPageRepository.RecommendedMission(MissionId, FromUserId, ToUserId, Toemail);
         }
         #endregion
+
+        #region
+        public async Task<JsonResult> GetRecommenedUserList(long MissionId, long LoginUserId)
+        {
+            return await _LandingPageRepository.GetUserListForRecommendation(MissionId, LoginUserId);
+        }
+        #endregion
     }
 }

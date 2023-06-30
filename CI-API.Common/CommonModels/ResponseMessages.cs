@@ -34,7 +34,7 @@ namespace CI_API.Common.CommonModels
 
         #region CommonErrorMessage
         public static string InternalServerError = "Internal Server error";
-        
+        public static string DataNotFound = "Data Not Found";
 
         #endregion
 

@@ -245,5 +245,52 @@ namespace CI_API.Data.Repository
             smtp.Send(message);
         }
         #endregion
+
+        #region
+        public async Task<JsonResult> GetUserListForRecommendation(long MissionId ,long LoginUserId)
+        {
+            try
+            {
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("MissionId", MissionId);
+                parameters.Add("LoginUserId", LoginUserId);
+
+                IEnumerable<User> userList = await sqlHelper.GetData<User, DynamicParameters>("RecommendedUsers",parameters);
+
+                if(userList != null)
+                {
+                    return new JsonResult(new apiResponse<IEnumerable<User>>
+                    {
+                        Message = ResponseMessages.Success,
+                        Data = userList,
+                        Result = true,
+                        StatusCode = responseStatusCode.Success
+                    });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<IEnumerable<User>>
+                    {
+                        Message = ResponseMessages.DataNotFound,
+                        Result = true,
+                        StatusCode = responseStatusCode.NotFound
+                    });
+                }
+
+
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new apiResponse<string>
+                {
+                    Message = ResponseMessages.InternalServerError,
+                    StatusCode = responseStatusCode.BadRequest,
+                    Result = false
+                });
+            }
+        }
+
+        #endregion
     }
 }
