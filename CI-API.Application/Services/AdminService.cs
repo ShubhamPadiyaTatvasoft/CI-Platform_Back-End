@@ -35,6 +35,12 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetAllMission(search);
         }
         #endregion
+        #region GetAllCMSPage
+        public async Task<JsonResult> GetAllCMSPage(string? search)
+        {
+            return await AdminRepository.GetAllCMSPage(search);
+        }
+        #endregion
 
         #region GetListOfCityCountryThemeSkills
         public async Task<JsonResult> getListOfCountryTheme()
@@ -68,6 +74,28 @@ namespace CI_API.Application.Services
         public async Task<JsonResult> deleteUser(long? userId) {
 
             return await AdminRepository.deleteUser(userId);
+        }
+        #endregion
+
+
+        #region AddUpdateMission
+        public async Task<JsonResult> addUpdateMission(MissionDataViewModel missionDataViewModel)
+        {
+            return await AdminRepository.addUpdateMission(missionDataViewModel);
+        }
+        #endregion
+
+        #region GetMissionDataFromId
+        public async Task<JsonResult> getMissionDataFromId(long? missionId)
+        {
+            return await AdminRepository.getMissionDataFromId(missionId);
+        }
+        #endregion 
+        
+        #region DeleteMission
+        public async Task<JsonResult> deleteMission(long? missionId)
+        {
+            return await AdminRepository.deleteMission(missionId);
         }
         #endregion
 
