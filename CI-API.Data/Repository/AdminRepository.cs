@@ -302,7 +302,7 @@ namespace CI_API.Data.Repository
                 if (missionData?.MissionType == StaticCode.GoalMission)
                 {
                     GoalMission? goalValueForMission = await Task.FromResult(cIDbContext.GoalMissions.Where(GM => GM.MissionId == missionId).FirstOrDefault());
-                    LandingPageViewModel missionDataForEdit = new()
+                    LandingPageViewModel missionDataForAdminPanel = new()
                     {
                         mission = missionData,
                         missionDocuments = documentsForMission,
@@ -310,18 +310,18 @@ namespace CI_API.Data.Repository
                         goalMissions = goalValueForMission,
                         missionSkills = skillForMission
                     };
-                    return new JsonResult(new apiResponse<LandingPageViewModel> { Message = ResponseMessages.MissionAddedSuccessfully, StatusCode = responseStatusCode.Success, Data = missionDataForEdit, Result = true });
+                    return new JsonResult(new apiResponse<LandingPageViewModel> { StatusCode = responseStatusCode.Success, Data = missionDataForAdminPanel, Result = true });
                 }
                 else
                 {
-                    LandingPageViewModel missionDataForEdit = new()
+                    LandingPageViewModel missionDataForAdminPanel= new()
                     {
                         mission = missionData,
                         missionDocuments = documentsForMission,
                         missionMedia = mediaForMission,
                         missionSkills = skillForMission
                     };
-                    return new JsonResult(new apiResponse<LandingPageViewModel> { Message = ResponseMessages.MissionAddedSuccessfully, StatusCode = responseStatusCode.Success, Data = missionDataForEdit, Result = true });
+                    return new JsonResult(new apiResponse<LandingPageViewModel> { StatusCode = responseStatusCode.Success, Data = missionDataForAdminPanel, Result = true });
                 }
             }
             catch
