@@ -15,6 +15,7 @@ namespace CI_API.Data.Interface
 
         public Task<JsonResult> GetAllUser(string? search);
         public Task<JsonResult> GetAllMission(string? search);
+        public Task<JsonResult> GetAllCMSPage(string? search);
         public Task<JsonResult> getListOfCountryTheme();
         public Task<JsonResult> getListOfCityBasedOnCountry(long? countryId);
         public Task<JsonResult> getUser(long? userId);

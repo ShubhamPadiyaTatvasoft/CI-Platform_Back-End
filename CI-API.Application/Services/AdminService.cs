@@ -35,6 +35,12 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetAllMission(search);
         }
         #endregion
+        #region GetAllCMSPage
+        public async Task<JsonResult> GetAllCMSPage(string? search)
+        {
+            return await AdminRepository.GetAllCMSPage(search);
+        }
+        #endregion
 
         #region GetListOfCityCountryThemeSkills
         public async Task<JsonResult> getListOfCountryTheme()

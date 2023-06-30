@@ -34,7 +34,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (search != null)
+                if (search != "")
                 {
                     List<User> userData = await Task.FromResult(cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList());
 
@@ -293,6 +293,8 @@ namespace CI_API.Data.Repository
         {
             try
             {
+
+
                 Mission? missionData = await Task.FromResult(cIDbContext.Missions.Where(M => M.MissionId == missionId).FirstOrDefault());
                 List<MissionDocument> documentsForMission = await Task.FromResult(cIDbContext.MissionDocuments.Where(MD => MD.MissionId == missionId).ToList());
                 List<MissionMedium> mediaForMission = await Task.FromResult(cIDbContext.MissionMedia.Where(MM => MM.MissionId == missionId).ToList());
@@ -683,7 +685,7 @@ namespace CI_API.Data.Repository
                         }
                     }
 
-                   
+
 
                     return new JsonResult(new apiResponse<string> { Message = ResponseMessages.MissionDeletedSuccessfully, StatusCode = responseStatusCode.Success, Result = true });
 
@@ -693,8 +695,37 @@ namespace CI_API.Data.Repository
                     return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
                 }
 
-               
 
+
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+        #endregion
+
+        #region CMSPages
+        #region GetAllMission
+        public async Task<JsonResult> GetAllCMSPage(string? search)
+        {
+            try
+            {
+                if (search != "")
+                {
+
+                    List<CmsPage>? cmsPages = await Task.FromResult(cIDbContext.CmsPages.Where(CM => CM.Title.Contains(search) || CM.Slug.Contains(search) || CM.Status.Contains(search)).ToList());
+
+                    return new JsonResult(new apiResponse<List<CmsPage>> { StatusCode = responseStatusCode.Success, Data = cmsPages, Result = true });
+                }
+                else
+                {
+                    List<CmsPage>? cmsPages = await Task.FromResult(cIDbContext.CmsPages.ToList());
+
+                    return new JsonResult(new apiResponse<List<CmsPage>> { StatusCode = responseStatusCode.Success, Data = cmsPages, Result = true });
+                }
             }
             catch
             {

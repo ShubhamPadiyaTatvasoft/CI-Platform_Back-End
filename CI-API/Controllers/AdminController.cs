@@ -128,6 +128,23 @@ namespace CI_API.Controllers
 
         #endregion
 
+        #region CMSPage
+
+        #region GetAllCMSPage
+        [Authorize]
+        [HttpPost("GetAllCMSPage")]
+        public async Task<JsonResult> GetAllCMSPage([FromBody] searchViewModel search)
+        {
+            if (ModelState.IsValid)
+            {
+                //return null;
+                return await AdminService.GetAllCMSPage(search.search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+        #endregion
+
         #region common
 
         #region GetListOfCityCountryThemeSkills
