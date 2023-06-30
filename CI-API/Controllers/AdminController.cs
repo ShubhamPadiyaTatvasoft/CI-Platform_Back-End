@@ -39,19 +39,6 @@ namespace CI_API.Controllers
         }
         #endregion
 
-        #region GetAllMission
-        [Authorize]
-        [HttpPost("GetAllMission")]
-        public async Task<JsonResult> GetAllMission([FromBody] searchViewModel search)
-        {
-            if (ModelState.IsValid)
-            {
-                return await AdminService.GetAllMission(search.search);
-            }
-            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
-        }
-        #endregion
-
         #region GetUserDataFromID
         [Authorize]
         [HttpPost("GetUserDataFromID")]
@@ -98,6 +85,19 @@ namespace CI_API.Controllers
         #endregion
 
         #region Mission
+
+        #region GetAllMission
+        [Authorize]
+        [HttpPost("GetAllMission")]
+        public async Task<JsonResult> GetAllMission([FromBody] searchViewModel search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllMission(search.search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
 
         #region AddUpdateMission
         [Authorize]
