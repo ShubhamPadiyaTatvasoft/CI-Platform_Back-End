@@ -652,7 +652,7 @@ namespace CI_API.Data.Repository
                     if (goalMission != null)
                     {
                         goalMission.DeletedAt = DateTime.Now;
-                        cIDbContext.SaveChanges();
+                       
                     }
 
                     List<MissionMedium>? missionOldMedia = await Task.FromResult(cIDbContext.MissionMedia.Where(MM => MM.MissionId == missionId).ToList());
@@ -661,7 +661,7 @@ namespace CI_API.Data.Repository
                         foreach (var media in missionOldMedia)
                         {
                             media.DeletedAt = DateTime.Now;
-                            cIDbContext.SaveChanges();
+                           
                         }
                     }
 
@@ -671,7 +671,7 @@ namespace CI_API.Data.Repository
                         foreach (var document in missionOldDocuments)
                         {
                             document.DeletedAt = DateTime.Now;
-                            cIDbContext.SaveChanges();
+                            
                         }
                     }
 
@@ -681,11 +681,11 @@ namespace CI_API.Data.Repository
                         foreach (var skill in missionSkill)
                         {
                             skill.DeletedAt = DateTime.Now;
-                            cIDbContext.SaveChanges();
+                           
                         }
                     }
 
-
+                    cIDbContext.SaveChanges();
 
                     return new JsonResult(new apiResponse<string> { Message = ResponseMessages.MissionDeletedSuccessfully, StatusCode = responseStatusCode.Success, Result = true });
 
