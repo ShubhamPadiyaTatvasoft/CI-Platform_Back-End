@@ -95,7 +95,7 @@ namespace CI_API.Data.Repository
                     Seatleft = (long)(mission.TotalSeats - mission.MissionApplications.Count(mission => mission.ApprovalStatus == "approve")),
                     AlreadyVolunteer = mission.MissionApplications.Count(mission => mission.ApprovalStatus == "approve"),
                     MissionImagePath = mission.MissionMedia.FirstOrDefault(image => image.MediaType == "PNG").MediaPath,
-                    TargetGoalValue = int.Parse(_cIDbContext.GoalMissions.FirstOrDefault(missions => missions.MissionId == query.FirstOrDefault(mission => mission.MissionType == "GOAL").MissionId).GoalValue),
+                    TargetGoalValue = (_cIDbContext.GoalMissions.First(missions => mission.MissionType == "GOAL" && missions.MissionId == query.FirstOrDefault(mission => mission.MissionType == "GOAL").MissionId).GoalValue == null ? 0: int.Parse(_cIDbContext.GoalMissions.First(missions => mission.MissionType == "GOAL" && missions.MissionId == query.FirstOrDefault(mission => mission.MissionType == "GOAL").MissionId).GoalValue)),
                     AchieveGoalValue = (int)mission.Timesheets.Where(goal => goal.Action != null).Sum(goal => goal.Action),
                 }).ToList());
 
