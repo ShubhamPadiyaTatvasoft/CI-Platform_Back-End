@@ -768,7 +768,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (cms.CmsPageId != null)
+                if (cms.CmsPageId != 0)
                 {
                     CmsPage? cmsDatatoBeUpdated = cIDbContext.CmsPages.Where(C => C.CmsPageId == cms.CmsPageId).FirstOrDefault();
 
@@ -778,8 +778,8 @@ namespace CI_API.Data.Repository
                     cmsDatatoBeUpdated.Status = cms.Status;
                     cmsDatatoBeUpdated.DeletedAt = null;
                     cmsDatatoBeUpdated.UpdatedAt = DateTime.Now;
-                    cIDbContext.SaveChanges();
-                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.CmsUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+
                 }
                 else
                 {
@@ -791,9 +791,21 @@ namespace CI_API.Data.Repository
                         Status = cms.Status,
                     };
                     cIDbContext.Add(newCms);
-                    cIDbContext.SaveChanges();
+
+
+                }
+                cIDbContext.SaveChanges();
+
+                if (cms.CmsPageId != 0)
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.CmsUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+                else
+                {
                     return new JsonResult(new apiResponse<string> { Message = ResponseMessages.CmsAddedSuccess, StatusCode = responseStatusCode.Success, Result = true });
                 }
+
+
             }
             catch
             {
@@ -812,10 +824,14 @@ namespace CI_API.Data.Repository
                 if (cmsId != 0)
                 {
                     CmsPage? cmsToBeDeleted = cIDbContext.CmsPages.Where(C => C.CmsPageId == cmsId).FirstOrDefault();
-                    cmsToBeDeleted.DeletedAt = DateTime.Now;
-                    cmsToBeDeleted.Status = StaticCode.CmsInActive;
+                    if (cmsToBeDeleted != null)
+                    {
+                        cmsToBeDeleted.DeletedAt = DateTime.Now;
+                        cmsToBeDeleted.Status = StaticCode.CmsInActive;
 
-                    cIDbContext.SaveChanges();
+                        cIDbContext.SaveChanges();
+                    }
+
                 }
                 return new JsonResult(new apiResponse<string> { Message = ResponseMessages.CmsDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
 
