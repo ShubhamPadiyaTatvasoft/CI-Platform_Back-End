@@ -132,13 +132,13 @@ namespace CI_API.Controllers
 
         #region GetAllCMSPage
         [Authorize]
-        [HttpPost("GetAllCMSPage")]
-        public async Task<JsonResult> GetAllCMSPage([FromBody] searchViewModel search)
+        [HttpGet("GetAllCMSPage")]
+        public async Task<JsonResult> GetAllCMSPage(string? search)
         {
             if (ModelState.IsValid)
             {
                 //return null;
-                return await AdminService.GetAllCMSPage(search.search);
+                return await AdminService.GetAllCMSPage(search);
             }
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
@@ -160,8 +160,8 @@ namespace CI_API.Controllers
 
         #region GetCmsDataFromId
         [Authorize]
-        [HttpPost("GetCmsDataFromId")]
-        public async Task<JsonResult> GetCmsDataFromId([FromBody] long? cmsId)
+        [HttpGet("GetCmsDataFromId/{cmsId}")]
+        public async Task<JsonResult> GetCmsDataFromId(long? cmsId)
         {
             if (cmsId != 0)
             {

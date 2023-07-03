@@ -714,7 +714,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                if (search != "")
+                if (search != null)
                 {
 
                     List<CmsPage>? cmsPages = await Task.FromResult(cIDbContext.CmsPages.Where(CM => CM.Title.Contains(search) || CM.Slug.Contains(search) || CM.Status.Contains(search)).ToList());
