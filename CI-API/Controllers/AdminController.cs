@@ -143,6 +143,48 @@ namespace CI_API.Controllers
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
         #endregion
+
+        #region AddEditCms
+        [Authorize]
+        [HttpPost("AddEditCms")]
+        public async Task<JsonResult> AddEditCms([FromBody] CmsPage cms)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddEditCms(cms);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #region GetCmsDataFromId
+        [Authorize]
+        [HttpPost("GetCmsDataFromId")]
+        public async Task<JsonResult> GetCmsDataFromId([FromBody] long? cmsId)
+        {
+            if (cmsId != 0)
+            {
+                return await AdminService.GetCmsDataFromId(cmsId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #region DeleteCms
+        [Authorize]
+        [HttpPost("DeleteCms")]
+        public async Task<JsonResult> DeleteCms([FromBody] long? cmsId)
+        {
+            if(cmsId != 0)
+            {
+            return await AdminService.DeleteCms(cmsId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
         #endregion
 
         #region common

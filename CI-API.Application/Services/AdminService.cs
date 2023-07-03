@@ -99,5 +99,27 @@ namespace CI_API.Application.Services
         }
         #endregion
 
+        #region AddEditCms
+        public async Task<JsonResult> AddEditCms(CmsPage cms)
+        {
+            return await AdminRepository.AddEditCms(cms);
+        }
+        #endregion
+
+        #region GetCmsDataFromId
+        public async Task<JsonResult> GetCmsDataFromId(long? cmsId)
+        {
+            return await AdminRepository.GetCmsDataFromId(cmsId);
+        }
+        #endregion
+
+
+        #region DeleteCms
+        public async Task<JsonResult> DeleteCms(long? cmsId)
+        {
+            return await AdminRepository.DeleteCms(cmsId);
+        }
+        #endregion 
+
     }
 }

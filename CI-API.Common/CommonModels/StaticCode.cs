@@ -14,5 +14,8 @@ namespace CI_API.Common.CommonModels
         public static string MissionInactive = "0";
         public static string GoalMission = "GOAL";
         public static string TimeMission = "TIME";
+        public static string CmsActive = "Active";
+        public static string CmsInActive = "InActive";
+
     }
 }

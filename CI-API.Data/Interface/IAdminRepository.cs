@@ -24,6 +24,9 @@ namespace CI_API.Data.Interface
         public Task<JsonResult> getMissionDataFromId(long? missionId);
         public Task<JsonResult> addUpdateMission(MissionDataViewModel missionDataViewModel);
         public Task<JsonResult> deleteMission(long? missionId);
+        public Task<JsonResult> DeleteCms(long? cmsId);
+        public Task<JsonResult> AddEditCms(CmsPage cms);
+        public Task<JsonResult> GetCmsDataFromId(long? cmsId);
 
 
         #endregion
