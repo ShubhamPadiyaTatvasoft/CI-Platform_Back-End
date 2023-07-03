@@ -92,13 +92,13 @@ namespace CI_API.Controllers
 
         #region
         [HttpPost("RecommendedUserGet")]
-        public async Task<JsonResult> RecommendedUsers(long MissionId, long LoginUserId)
+        public async Task<JsonResult> RecommendedUsers(long MissionId, long UserId)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    return await landingPageService.GetRecommenedUserList(MissionId, LoginUserId);
+                    return await landingPageService.GetRecommenedUserList(MissionId, UserId);
                 }
                 catch (Exception)
                 {
