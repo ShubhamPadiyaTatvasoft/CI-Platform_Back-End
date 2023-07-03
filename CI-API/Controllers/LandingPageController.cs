@@ -91,7 +91,7 @@ namespace CI_API.Controllers
 
 
         #region
-        [HttpPost("RecommendedUserGet")]
+        [HttpGet("RecommendedUserGet")]
         public async Task<JsonResult> RecommendedUsers(long MissionId, long UserId)
         {
             if (ModelState.IsValid)
