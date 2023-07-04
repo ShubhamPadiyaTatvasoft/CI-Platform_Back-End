@@ -855,33 +855,52 @@ namespace CI_API.Data.Repository
 
                 if (search == null)
                 {
-                    List<MissionApplication> missionApplications = cIDbContext.MissionApplications.Where(M => M.ApprovalStatus == StaticCode.missionApplicationPending).ToList();
-                    List<User> userData = cIDbContext.Users.ToList();
-                    List<Mission> missionData = cIDbContext.Missions.ToList();
 
-                    MissionApplicationViewModel allMissionApplications = new()
-                    {
-                        Users = userData,
-                        Applications = missionApplications,
-                        Missions = missionData,
-                    };
+                    var allMissionApplication = await Task.FromResult(cIDbContext.MissionApplications.ToList());
 
-                    return new JsonResult(new apiResponse<MissionApplicationViewModel> { StatusCode = responseStatusCode.Success, Data = allMissionApplications, Result = false });
+                    var missionApplications = await Task.FromResult(from missionApplication in allMissionApplication
+                                                                    join mission in cIDbContext.Missions on missionApplication.MissionId equals mission.MissionId
+                                                                    join user in cIDbContext.Users on missionApplication.UserId equals user.UserId
+
+
+                                                                    select new VolunteerMissionViewModel
+                                                                    {
+                                                                        missionId = mission.MissionId,
+                                                                        missionTitle = mission.Title,
+                                                                        userName = user.FirstName + " " + user.LastName,
+                                                                        missionApplicationId = missionApplication.MissionApplicationId,
+                                                                        userId = user.UserId,
+                                                                        appliedDate = missionApplication.AppliedAt,
+
+                                                                    });
+
+
+                    return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> {  StatusCode = responseStatusCode.Success, Data = missionApplications.ToList(), Result = true });
+                    
                 }
                 else
                 {
-                    List<MissionApplication> missionApplications = cIDbContext.MissionApplications.Where(MA => MA.ApprovalStatus == StaticCode.missionApplicationPending && MA.Mission.Title.Contains(search) || MA.User.FirstName.Contains(search) || MA.User.LastName.Contains(search)).ToList();
-                    List<User> userData = cIDbContext.Users.ToList();
-                    List<Mission> missionData = cIDbContext.Missions.ToList();
+                    var allMissionApplication = await Task.FromResult(cIDbContext.MissionApplications.Where(MA => MA.ApprovalStatus == StaticCode.missionApplicationPending && MA.Mission.Title.Contains(search) || MA.User.FirstName.Contains(search) || MA.User.LastName.Contains(search)).ToList());
 
-                    MissionApplicationViewModel allMissionApplications = new()
-                    {
-                        Users = userData,
-                        Applications = missionApplications,
-                        Missions = missionData,
-                    };
+                    var missionApplications = await Task.FromResult(from missionApplication in allMissionApplication
+                                                                    join mission in cIDbContext.Missions on missionApplication.MissionId equals mission.MissionId
+                                                                    join user in cIDbContext.Users on missionApplication.UserId equals user.UserId
 
-                    return new JsonResult(new apiResponse<MissionApplicationViewModel> { StatusCode = responseStatusCode.Success, Data = allMissionApplications, Result = false });
+
+                                                                    select new VolunteerMissionViewModel
+                                                                    {
+                                                                        missionId = mission.MissionId,
+                                                                        missionTitle = mission.Title,
+                                                                        userName = user.FirstName + " " + user.LastName,
+                                                                        missionApplicationId = missionApplication.MissionApplicationId,
+                                                                        userId = user.UserId,
+                                                                        appliedDate = missionApplication.AppliedAt,
+
+                                                                    });
+
+
+                    return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> { StatusCode = responseStatusCode.Success, Data = missionApplications.ToList(), Result = true });
+                    
                 }
             }
             catch
@@ -949,33 +968,70 @@ namespace CI_API.Data.Repository
 
                 if (search == null)
                 {
-                    List<Story> AllStories = cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending).ToList();
-                    List<User> userData = cIDbContext.Users.ToList();
-                    List<Mission> missionData = cIDbContext.Missions.ToList();
 
-                    AdminPanelStoryViewModel allStoriesData = new()
-                    {
-                        Users = userData,
-                        Stories = AllStories,
-                        Missions = missionData,
-                    };
+                    var allStoriesData = await Task.FromResult(cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending).ToList());
 
-                    return new JsonResult(new apiResponse<AdminPanelStoryViewModel> { StatusCode = responseStatusCode.Success, Data = allStoriesData, Result = false });
+                    var missionStories = await Task.FromResult(from story in allStoriesData
+                                                                    join mission in cIDbContext.Missions on story.MissionId equals mission.MissionId
+                                                                    join user in cIDbContext.Users on story.UserId equals user.UserId
+
+
+                                                                    select new VolunteerMissionViewModel
+                                                                    {
+                                                                        missionTitle = mission.Title,
+                                                                        userName = user.FirstName + " " + user.LastName,
+                                                                        storyTitle=story.Title,
+                                                                        storyId = story.StoryId,
+
+                                                                    });
+
+
+                    return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> { StatusCode = responseStatusCode.Success, Data = missionStories.ToList(), Result = true });
+                    //List<Story> AllStories = cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending).ToList();
+                    //List<User> userData = cIDbContext.Users.ToList();
+                    //List<Mission> missionData = cIDbContext.Missions.ToList();
+
+                    //AdminPanelStoryViewModel allStoriesData = new()
+                    //{
+                    //    Users = userData,
+                    //    Stories = AllStories,
+                    //    Missions = missionData,
+                    //};
+
+                    //return new JsonResult(new apiResponse<AdminPanelStoryViewModel> { StatusCode = responseStatusCode.Success, Data = allStoriesData, Result = false });
                 }
                 else
                 {
-                    List<Story> AllStories = cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending && s.Title.Contains(search) || s.Mission.Title.Contains(search) || s.User.FirstName.Contains(search) || s.User.LastName.Contains(search)).ToList();
-                    List<User> userData = cIDbContext.Users.ToList();
-                    List<Mission> missionData = cIDbContext.Missions.ToList();
+                    var allStoriesData = await Task.FromResult(cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending && s.Title.Contains(search) || s.Mission.Title.Contains(search) || s.User.FirstName.Contains(search) || s.User.LastName.Contains(search)).ToList());
 
-                    AdminPanelStoryViewModel allStoriesData = new()
-                    {
-                        Users = userData,
-                        Stories = AllStories,
-                        Missions = missionData,
-                    };
+                    var missionStories = await Task.FromResult(from story in allStoriesData
+                                                               join mission in cIDbContext.Missions on story.MissionId equals mission.MissionId
+                                                               join user in cIDbContext.Users on story.UserId equals user.UserId
 
-                    return new JsonResult(new apiResponse<AdminPanelStoryViewModel> { StatusCode = responseStatusCode.Success, Data = allStoriesData, Result = false });
+
+                                                               select new VolunteerMissionViewModel
+                                                               {
+                                                                   missionTitle = mission.Title,
+                                                                   userName = user.FirstName + " " + user.LastName,
+                                                                   storyTitle = story.Title,
+                                                                   storyId=story.StoryId,
+
+                                                               });
+
+
+                    return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> { StatusCode = responseStatusCode.Success, Data = missionStories.ToList(), Result = true });
+                    //List<Story> AllStories = cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending && s.Title.Contains(search) || s.Mission.Title.Contains(search) || s.User.FirstName.Contains(search) || s.User.LastName.Contains(search)).ToList();
+                    //List<User> userData = cIDbContext.Users.ToList();
+                    //List<Mission> missionData = cIDbContext.Missions.ToList();
+
+                    //AdminPanelStoryViewModel allStoriesData = new()
+                    //{
+                    //    Users = userData,
+                    //    Stories = AllStories,
+                    //    Missions = missionData,
+                    //};
+
+                    //return new JsonResult(new apiResponse<AdminPanelStoryViewModel> { StatusCode = responseStatusCode.Success, Data = allStoriesData, Result = false });
                 }
             }
             catch
@@ -1137,5 +1193,6 @@ namespace CI_API.Data.Repository
 
         #endregion
 
+       
     }
 }

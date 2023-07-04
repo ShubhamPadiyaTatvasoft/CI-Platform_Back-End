@@ -23,7 +23,7 @@ namespace CI_API.Core.ViewModel
         public string? organizationDetail { get; set; }
         public long? leftSeats { get; set; }
         public DateTime? deadline { get; set; }
-        public long missionApplicationId { get; set; }
+        public long? missionApplicationId { get; set; }
         public string? documentPath { get; set; }
         public string? documentName { get; set; }
         public string? documentType { get; set; }
@@ -33,6 +33,7 @@ namespace CI_API.Core.ViewModel
         public string goalObjectiveText { get; set; } 
         public string goalValue { get; set; }
         public long applymissionuser { get; set; }
+        public long? storyId { get; set; }
         public double avgRating { get; set; }
         public DateTime createdAtcomment { get; set; }
         public string? avatar { get; set; }
@@ -43,6 +44,11 @@ namespace CI_API.Core.ViewModel
         public List<DocumentDetail> docsPath { get; set; }  
         public string? imgPath { get; set; }        
         public List<Comment> comments { get; set; }
+        public DateTime? appliedDate { get; set; }
+        public string? missionTitle { get; set; }
+        public string? userName { get; set; }
+        public string? storyTitle { get; set; }
+
     }
 
     public class DocumentDetail
