@@ -88,5 +88,25 @@ namespace CI_API.Controllers
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
         #endregion
+
+
+        #region
+        [HttpGet("RecommendedUserGet")]
+        public async Task<JsonResult> RecommendedUsers(long MissionId, long UserId)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    return await landingPageService.GetRecommenedUserList(MissionId, UserId);
+                }
+                catch (Exception)
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
     }
 }
