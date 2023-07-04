@@ -32,6 +32,7 @@ namespace CI_API.Data.Interface
         public Task<JsonResult> ApproveRejectMissionApplication(MissionApplicationViewModel application);
         public Task<JsonResult> ApproveRejectDeleteStory(AdminPanelStoryViewModel storyData);
 
+        
 
         #endregion
     }
