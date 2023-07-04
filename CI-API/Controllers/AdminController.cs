@@ -132,15 +132,57 @@ namespace CI_API.Controllers
 
         #region GetAllCMSPage
         [Authorize]
-        [HttpPost("GetAllCMSPage")]
-        public async Task<JsonResult> GetAllCMSPage([FromBody] searchViewModel search)
+        [HttpGet("GetAllCMSPage")]
+        public async Task<JsonResult> GetAllCMSPage(string? search)
         {
             if (ModelState.IsValid)
             {
                 //return null;
-                return await AdminService.GetAllCMSPage(search.search);
+                return await AdminService.GetAllCMSPage(search);
             }
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region AddEditCms
+        [Authorize]
+        [HttpPost("AddEditCms")]
+        public async Task<JsonResult> AddEditCms([FromBody] CmsPage cms)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddEditCms(cms);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #region GetCmsDataFromId
+        [Authorize]
+        [HttpGet("GetCmsDataFromId/{cmsId}")]
+        public async Task<JsonResult> GetCmsDataFromId(long? cmsId)
+        {
+            if (cmsId != 0)
+            {
+                return await AdminService.GetCmsDataFromId(cmsId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #region DeleteCms
+        [Authorize]
+        [HttpPost("DeleteCms")]
+        public async Task<JsonResult> DeleteCms([FromBody] long? cmsId)
+        {
+            if(cmsId != 0)
+            {
+            return await AdminService.DeleteCms(cmsId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
         }
         #endregion
         #endregion

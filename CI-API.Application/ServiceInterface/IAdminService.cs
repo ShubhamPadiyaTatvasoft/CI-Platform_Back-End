@@ -22,8 +22,11 @@ namespace CI_API.Application.ServiceInterface
         public Task<JsonResult> updateUserData(UserDetailViewModel userDetailViewModel);
         public Task<JsonResult> deleteUser(long? userId);
         public Task<JsonResult> getMissionDataFromId(long? missionId);
+        public Task<JsonResult> GetCmsDataFromId(long? cmsId);
         public Task<JsonResult> addUpdateMission(MissionDataViewModel missionDataViewModel);
         public Task<JsonResult> deleteMission(long? missionId);
+        public Task<JsonResult> AddEditCms(CmsPage cms);
+        public Task<JsonResult> DeleteCms(long? cmsId);
 
         #endregion
     }

@@ -314,7 +314,7 @@ namespace CI_API.Data.Repository
                 }
                 else
                 {
-                    LandingPageViewModel missionDataForAdminPanel= new()
+                    LandingPageViewModel missionDataForAdminPanel = new()
                     {
                         mission = missionData,
                         missionDocuments = documentsForMission,
@@ -652,7 +652,7 @@ namespace CI_API.Data.Repository
                     if (goalMission != null)
                     {
                         goalMission.DeletedAt = DateTime.Now;
-                       
+
                     }
 
                     List<MissionMedium>? missionOldMedia = await Task.FromResult(cIDbContext.MissionMedia.Where(MM => MM.MissionId == missionId).ToList());
@@ -661,7 +661,7 @@ namespace CI_API.Data.Repository
                         foreach (var media in missionOldMedia)
                         {
                             media.DeletedAt = DateTime.Now;
-                           
+
                         }
                     }
 
@@ -671,7 +671,7 @@ namespace CI_API.Data.Repository
                         foreach (var document in missionOldDocuments)
                         {
                             document.DeletedAt = DateTime.Now;
-                            
+
                         }
                     }
 
@@ -681,7 +681,7 @@ namespace CI_API.Data.Repository
                         foreach (var skill in missionSkill)
                         {
                             skill.DeletedAt = DateTime.Now;
-                           
+
                         }
                     }
 
@@ -708,12 +708,13 @@ namespace CI_API.Data.Repository
         #endregion
 
         #region CMSPages
-        #region GetAllMission
+
+        #region GetAllCMSPage
         public async Task<JsonResult> GetAllCMSPage(string? search)
         {
             try
             {
-                if (search != "")
+                if (search != null)
                 {
 
                     List<CmsPage>? cmsPages = await Task.FromResult(cIDbContext.CmsPages.Where(CM => CM.Title.Contains(search) || CM.Slug.Contains(search) || CM.Status.Contains(search)).ToList());
@@ -726,6 +727,114 @@ namespace CI_API.Data.Repository
 
                     return new JsonResult(new apiResponse<List<CmsPage>> { StatusCode = responseStatusCode.Success, Data = cmsPages, Result = true });
                 }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #region GetCmsDataFromId
+        public async Task<JsonResult> GetCmsDataFromId(long? cmsId)
+        {
+            try
+            {
+                if (cmsId != null)
+                {
+                    CmsPage? cms = cIDbContext.CmsPages.Where(c => c.CmsPageId == cmsId).FirstOrDefault();
+                    return new JsonResult(new apiResponse<CmsPage> { StatusCode = responseStatusCode.Success, Data = cms, Result = true });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+                }
+
+
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #region AddEditCms
+        public async Task<JsonResult> AddEditCms(CmsPage cms)
+        {
+            try
+            {
+
+                if (cms.CmsPageId != 0)
+                {
+                    CmsPage? cmsDatatoBeUpdated = cIDbContext.CmsPages.Where(C => C.CmsPageId == cms.CmsPageId).FirstOrDefault();
+
+                    cmsDatatoBeUpdated.Title = cms.Title;
+                    cmsDatatoBeUpdated.Description = cms.Description;
+                    cmsDatatoBeUpdated.Slug = cms.Slug;
+                    cmsDatatoBeUpdated.Status = cms.Status;
+                    cmsDatatoBeUpdated.DeletedAt = null;
+                    cmsDatatoBeUpdated.UpdatedAt = DateTime.Now;
+
+
+                }
+                else
+                {
+                    CmsPage newCms = new()
+                    {
+                        Title = cms.Title,
+                        Description = cms.Description,
+                        Slug = cms.Slug,
+                        Status = cms.Status,
+                    };
+                    cIDbContext.Add(newCms);
+
+
+                }
+                cIDbContext.SaveChanges();
+
+                if (cms.CmsPageId != 0)
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.CmsUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.CmsAddedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+
+
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+
+        #region DeleteCms
+        public async Task<JsonResult> DeleteCms(long? cmsId)
+        {
+            try
+            {
+                if (cmsId != 0)
+                {
+                    CmsPage? cmsToBeDeleted = cIDbContext.CmsPages.Where(C => C.CmsPageId == cmsId).FirstOrDefault();
+                    if (cmsToBeDeleted != null)
+                    {
+                        cmsToBeDeleted.DeletedAt = DateTime.Now;
+                        cmsToBeDeleted.Status = StaticCode.CmsInActive;
+
+                        cIDbContext.SaveChanges();
+                    }
+
+                }
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.CmsDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
             }
             catch
             {
