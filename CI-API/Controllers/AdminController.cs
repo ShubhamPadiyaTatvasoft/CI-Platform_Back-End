@@ -21,7 +21,6 @@ namespace CI_API.Controllers
         }
         #endregion
 
-
         #region User
 
         #region getAllUser
@@ -191,6 +190,7 @@ namespace CI_API.Controllers
         #region missionApplication
 
         #region GetAllMissionApplication
+        [Authorize]
         [HttpGet("GetAllMissionApplication")]
         public async Task<JsonResult> GetAllMissionApplication(string? search)
         {
@@ -215,8 +215,11 @@ namespace CI_API.Controllers
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
         #endregion
+
         #endregion
+
         #region story
+
         #region GetAllStories
         [Authorize]
         [HttpGet("GetAllStories")]
@@ -242,9 +245,8 @@ namespace CI_API.Controllers
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
         #endregion
-        #endregion
 
-     
+        #endregion
 
         #region common
 
