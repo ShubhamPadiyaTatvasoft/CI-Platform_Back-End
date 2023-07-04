@@ -16,6 +16,12 @@ namespace CI_API.Common.CommonModels
         public static string TimeMission = "TIME";
         public static string CmsActive = "Active";
         public static string CmsInActive = "InActive";
+        public static string storyStatusApprove = "approved";
+        public static string storyStatusReject = "rejected";
+        public static string storyStatusDelete = "deleted";
+        public static string storyStatusPending = "pending";
+        public static string missionApplicationPending = "pending";
+        public static string missionApplicationApprove = "approved";
 
     }
 }

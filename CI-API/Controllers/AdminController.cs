@@ -21,11 +21,14 @@ namespace CI_API.Controllers
         }
         #endregion
 
-
         #region User
 
         #region getAllUser
-
+        /// <summary>
+        /// data of all the users
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("GetAllUser")]
         public async Task<JsonResult> GetAllUser([FromBody] searchViewModel search)
@@ -40,6 +43,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region GetUserDataFromID
+        /// <summary>
+        /// returns userData from userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("GetUserDataFromID")]
         public async Task<JsonResult> getUserDataFromID([FromBody] long? userId)
@@ -54,7 +62,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region UpdateUserData
-
+        /// <summary>
+        /// it updates the user information
+        /// </summary>
+        /// <param name="userDetailViewModel"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("UpdateUserData")]
         public async Task<JsonResult> updateUserData([FromBody] UserDetailViewModel userDetailViewModel)
@@ -69,7 +81,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region DeleteUserData
-
+        /// <summary>
+        /// it deletes the user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("DeleteUserData")]
         public async Task<JsonResult> deleteUserData([FromBody] long? userId)
@@ -87,6 +103,11 @@ namespace CI_API.Controllers
         #region Mission
 
         #region GetAllMission
+        /// <summary>
+        /// get data of all the missions
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("GetAllMission")]
         public async Task<JsonResult> GetAllMission([FromBody] searchViewModel search)
@@ -100,6 +121,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region AddUpdateMission
+        /// <summary>
+        /// it updates the info of mission
+        /// </summary>
+        /// <param name="missionDataViewModel"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("AddUpdateMission")]
         public async Task<JsonResult> addUpdateMission([FromBody] MissionDataViewModel missionDataViewModel)
@@ -109,6 +135,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region GetMissionDataFromId
+        /// <summary>
+        /// get mission data from mission id For updation
+        /// </summary>
+        /// <param name="missionId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("GetMissionDataFromId")]
         public async Task<JsonResult> getMissionDataFromId([FromBody] long? missionId)
@@ -118,6 +149,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region DeleteMission
+        /// <summary>
+        /// delete the mission
+        /// </summary>
+        /// <param name="missionId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("DeleteMission")]
         public async Task<JsonResult> deleteMission([FromBody] long? missionId)
@@ -131,6 +167,11 @@ namespace CI_API.Controllers
         #region CMSPage
 
         #region GetAllCMSPage
+        /// <summary>
+        /// get data of all the cms pages
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetAllCMSPage")]
         public async Task<JsonResult> GetAllCMSPage(string? search)
@@ -145,6 +186,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region AddEditCms
+        /// <summary>
+        /// add or edit the cms data
+        /// </summary>
+        /// <param name="cms"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("AddEditCms")]
         public async Task<JsonResult> AddEditCms([FromBody] CmsPage cms)
@@ -159,6 +205,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region GetCmsDataFromId
+        /// <summary>
+        /// get data of perticular cms page from its id
+        /// </summary>
+        /// <param name="cmsId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetCmsDataFromId/{cmsId}")]
         public async Task<JsonResult> GetCmsDataFromId(long? cmsId)
@@ -173,23 +224,114 @@ namespace CI_API.Controllers
         #endregion
 
         #region DeleteCms
+        /// <summary>
+        /// delete the cms data
+        /// </summary>
+        /// <param name="cmsId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("DeleteCms")]
         public async Task<JsonResult> DeleteCms([FromBody] long? cmsId)
         {
-            if(cmsId != 0)
+            if (cmsId != 0)
             {
-            return await AdminService.DeleteCms(cmsId);
+                return await AdminService.DeleteCms(cmsId);
             }
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
 
         }
         #endregion
+
+        #endregion
+
+        #region missionApplication
+
+        #region GetAllMissionApplication
+        /// <summary>
+        /// it gets all the data of mission applications
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetAllMissionApplication")]
+        public async Task<JsonResult> GetAllMissionApplication(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllMissionApplication(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+
+        #endregion
+
+        #region ApproveRejectMissionApplication
+        /// <summary>
+        /// it approve or reject the mission appplication
+        /// </summary>
+        /// <param name="application"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("ApproveRejectMissionApplication")]
+        public async Task<JsonResult> ApproveRejectMissionApplication([FromBody] MissionApplicationViewModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.ApproveRejectMissionApplication(application);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #endregion
+
+        #region story
+
+        #region GetAllStories
+        /// <summary>
+        /// get data of all the stories
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetAllStories")]
+        public async Task<JsonResult> GetAllStories(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllStories(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region ApproveRejectDeleteStory
+        /// <summary>
+        /// approve or reject the story
+        /// </summary>
+        /// <param name="storyData"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("ApproveRejectDeleteStory")]
+        public async Task<JsonResult> ApproveRejectDeleteStory([FromBody] AdminPanelStoryViewModel storyData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.ApproveRejectDeleteStory(storyData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
         #endregion
 
         #region common
 
         #region GetListOfCityCountryThemeSkills
+        /// <summary>
+        /// get all the country theme skills
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetListOfCityCountryThemeSkills")]
         public async Task<JsonResult> getListOfCityCountryThemeSkills()
@@ -203,6 +345,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region GetListOfCityBasedOnCountry
+        /// <summary>
+        /// get city based on country
+        /// </summary>
+        /// <param name="countryId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("GetListOfCityBasedOnCountry")]
         public async Task<JsonResult> getListOfCityBasedOnCountry([FromBody] long? countryId)
