@@ -35,6 +35,7 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetAllMission(search);
         }
         #endregion
+
         #region GetAllCMSPage
         public async Task<JsonResult> GetAllCMSPage(string? search)
         {
@@ -42,6 +43,19 @@ namespace CI_API.Application.Services
         }
         #endregion
 
+        #region GetAllMissionApplication
+        public async Task<JsonResult> GetAllMissionApplication(string? search)
+        {
+            return await AdminRepository.GetAllMissionApplication(search);
+        }
+
+        #endregion 
+        #region GetAllMissionApplication
+        public async Task<JsonResult> GetAllStories(string? search)
+        {
+            return await AdminRepository.GetAllStories(search);
+        }
+        #endregion
         #region GetListOfCityCountryThemeSkills
         public async Task<JsonResult> getListOfCountryTheme()
         {
@@ -76,7 +90,6 @@ namespace CI_API.Application.Services
             return await AdminRepository.deleteUser(userId);
         }
         #endregion
-
 
         #region AddUpdateMission
         public async Task<JsonResult> addUpdateMission(MissionDataViewModel missionDataViewModel)
@@ -113,13 +126,27 @@ namespace CI_API.Application.Services
         }
         #endregion
 
-
         #region DeleteCms
         public async Task<JsonResult> DeleteCms(long? cmsId)
         {
             return await AdminRepository.DeleteCms(cmsId);
         }
-        #endregion 
+        #endregion
 
+        #region ApproveRejectMissionApplication
+        public async Task<JsonResult> ApproveRejectMissionApplication(MissionApplicationViewModel application)
+        {
+            return await AdminRepository.ApproveRejectMissionApplication(application);
+
+        }
+        #endregion
+
+        #region ApproveRejectDeleteStory
+        public async Task<JsonResult> ApproveRejectDeleteStory(AdminPanelStoryViewModel storyData)
+        {
+            return await AdminRepository.ApproveRejectDeleteStory(storyData);
+
+        }
+        #endregion
     }
 }

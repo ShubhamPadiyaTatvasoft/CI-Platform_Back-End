@@ -177,15 +177,74 @@ namespace CI_API.Controllers
         [HttpPost("DeleteCms")]
         public async Task<JsonResult> DeleteCms([FromBody] long? cmsId)
         {
-            if(cmsId != 0)
+            if (cmsId != 0)
             {
-            return await AdminService.DeleteCms(cmsId);
+                return await AdminService.DeleteCms(cmsId);
             }
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
 
         }
         #endregion
+
         #endregion
+
+        #region missionApplication
+
+        #region GetAllMissionApplication
+        [HttpGet("GetAllMissionApplication")]
+        public async Task<JsonResult> GetAllMissionApplication(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllMissionApplication(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+
+        #endregion
+
+        #region ApproveRejectMissionApplication
+        [Authorize]
+        [HttpPost("ApproveRejectMissionApplication")]
+        public async Task<JsonResult> ApproveRejectMissionApplication([FromBody] MissionApplicationViewModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.ApproveRejectMissionApplication(application);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+        #endregion
+        #region story
+        #region GetAllStories
+        [Authorize]
+        [HttpGet("GetAllStories")]
+        public async Task<JsonResult> GetAllStories(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllStories(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region ApproveRejectDeleteStory
+        [Authorize]
+        [HttpPost("ApproveRejectDeleteStory")]
+        public async Task<JsonResult> ApproveRejectDeleteStory([FromBody] AdminPanelStoryViewModel storyData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.ApproveRejectDeleteStory(storyData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+        #endregion
+
+     
 
         #region common
 

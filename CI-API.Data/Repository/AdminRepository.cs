@@ -845,6 +845,243 @@ namespace CI_API.Data.Repository
         #endregion
         #endregion
 
+        #region missionApplication
+
+        #region GetAllMissionApplication
+        public async Task<JsonResult> GetAllMissionApplication(string? search)
+        {
+            try
+            {
+
+                if (search == null)
+                {
+                    List<MissionApplication> missionApplications = cIDbContext.MissionApplications.Where(M => M.ApprovalStatus == StaticCode.missionApplicationPending).ToList();
+                    List<User> userData = cIDbContext.Users.ToList();
+                    List<Mission> missionData = cIDbContext.Missions.ToList();
+
+                    MissionApplicationViewModel allMissionApplications = new()
+                    {
+                        Users = userData,
+                        Applications = missionApplications,
+                        Missions = missionData,
+                    };
+
+                    return new JsonResult(new apiResponse<MissionApplicationViewModel> { StatusCode = responseStatusCode.Success, Data = allMissionApplications, Result = false });
+                }
+                else
+                {
+                    List<MissionApplication> missionApplications = cIDbContext.MissionApplications.Where(MA => MA.ApprovalStatus == StaticCode.missionApplicationPending && MA.Mission.Title.Contains(search) || MA.User.FirstName.Contains(search) || MA.User.LastName.Contains(search)).ToList();
+                    List<User> userData = cIDbContext.Users.ToList();
+                    List<Mission> missionData = cIDbContext.Missions.ToList();
+
+                    MissionApplicationViewModel allMissionApplications = new()
+                    {
+                        Users = userData,
+                        Applications = missionApplications,
+                        Missions = missionData,
+                    };
+
+                    return new JsonResult(new apiResponse<MissionApplicationViewModel> { StatusCode = responseStatusCode.Success, Data = allMissionApplications, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #region ApproveRejectMissionApplication
+        public async Task<JsonResult> ApproveRejectMissionApplication(MissionApplicationViewModel application)
+        {
+
+            try
+            {
+                if (application.missionApplicationId != null)
+                {
+                    MissionApplication? applicationToBeReviewed = cIDbContext.MissionApplications.Where(MA => MA.MissionApplicationId == application.missionApplicationId).FirstOrDefault();
+                    if (applicationToBeReviewed != null)
+                    {
+                        applicationToBeReviewed.ApprovalStatus = application.approvalStatus;
+                        applicationToBeReviewed.UpdatedAt = DateTime.Now;
+                        cIDbContext.SaveChanges();
+                        if (application.approvalStatus == StaticCode.missionApplicationApprove)
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.MissionApplicationApproved, StatusCode = responseStatusCode.Success, Result = false });
+                        }
+                        else
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.MissionApplicationRejected, StatusCode = responseStatusCode.Success, Result = false });
+                        }
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+
+
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+
+        }
+        #endregion
+
+        #endregion
+
+        #region stories
+
+        #region GetAllStories
+        public async Task<JsonResult> GetAllStories(string? search)
+        {
+            try
+            {
+
+                if (search == null)
+                {
+                    List<Story> AllStories = cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending).ToList();
+                    List<User> userData = cIDbContext.Users.ToList();
+                    List<Mission> missionData = cIDbContext.Missions.ToList();
+
+                    AdminPanelStoryViewModel allStoriesData = new()
+                    {
+                        Users = userData,
+                        Stories = AllStories,
+                        Missions = missionData,
+                    };
+
+                    return new JsonResult(new apiResponse<AdminPanelStoryViewModel> { StatusCode = responseStatusCode.Success, Data = allStoriesData, Result = false });
+                }
+                else
+                {
+                    List<Story> AllStories = cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending && s.Title.Contains(search) || s.Mission.Title.Contains(search) || s.User.FirstName.Contains(search) || s.User.LastName.Contains(search)).ToList();
+                    List<User> userData = cIDbContext.Users.ToList();
+                    List<Mission> missionData = cIDbContext.Missions.ToList();
+
+                    AdminPanelStoryViewModel allStoriesData = new()
+                    {
+                        Users = userData,
+                        Stories = AllStories,
+                        Missions = missionData,
+                    };
+
+                    return new JsonResult(new apiResponse<AdminPanelStoryViewModel> { StatusCode = responseStatusCode.Success, Data = allStoriesData, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #region ApproveRejectDeleteStory
+        public async Task<JsonResult> ApproveRejectDeleteStory(AdminPanelStoryViewModel storyData)
+        {
+            try
+            {
+                if (storyData != null)
+                {
+                    if (storyData.storyStatus == StaticCode.storyStatusDelete)
+                    {
+                        return await DeleteStory(storyData);
+                    }
+                    else
+                    {
+                        Story? storyToBeApprovedOrRejected = await Task.FromResult(cIDbContext.Stories.Where(S => S.StoryId == storyData.storyId).FirstOrDefault());
+                        if(storyToBeApprovedOrRejected != null)
+                        {
+                            storyToBeApprovedOrRejected.UpdatedAt = DateTime.Now;
+                            storyToBeApprovedOrRejected.Status = storyData.storyStatus;
+                            if(storyData.storyStatus == StaticCode.storyStatusApprove)
+                            {
+                                storyToBeApprovedOrRejected.PublishedAt = DateTime.Now;
+                            }
+                            cIDbContext.SaveChanges();
+                            if (storyData.storyStatus == StaticCode.storyStatusApprove)
+                            {
+                                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.StoryApproved, StatusCode = responseStatusCode.Success, Result = false });
+                            }
+                            else
+                            {
+                                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.StoryRejected, StatusCode = responseStatusCode.Success, Result = false });
+                            }
+                        }
+                        else
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+
+        }
+        #endregion
+
+        #region Delete Story
+        public async Task<JsonResult> DeleteStory(AdminPanelStoryViewModel storyData)
+        {
+            try
+            {
+                Story? storyToBeDeleted = await Task.FromResult(cIDbContext.Stories.Where(S => S.StoryId == storyData.storyId).FirstOrDefault());
+                if (storyToBeDeleted != null)
+                {
+                    storyToBeDeleted.Status = StaticCode.storyStatusDelete;
+                    storyToBeDeleted.DeletedAt = DateTime.Now;
+
+                    List<StoryMedium> storyMedia = cIDbContext.StoryMedia.Where(SM => SM.StoryId == storyToBeDeleted.StoryId).ToList();
+                    if (storyMedia != null)
+                    {
+                        foreach (var item in storyMedia)
+                        {
+                            cIDbContext.Remove(item);
+                           
+
+                        }
+                    }
+                    cIDbContext.SaveChanges();
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.StoryDeleted, StatusCode = responseStatusCode.Success, Result = false });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region common
 
         #region GetListOfCountryTheme

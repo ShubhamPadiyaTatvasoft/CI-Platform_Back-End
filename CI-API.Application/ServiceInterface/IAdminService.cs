@@ -16,6 +16,8 @@ namespace CI_API.Application.ServiceInterface
         public Task<JsonResult> GetAllUser(string? search);
         public Task<JsonResult> GetAllMission(string? search);
         public Task<JsonResult> GetAllCMSPage(string? search);
+        public Task<JsonResult> GetAllMissionApplication(string? search);
+        public Task<JsonResult> GetAllStories(string? search);
         public Task<JsonResult> getListOfCountryTheme();
         public Task<JsonResult> getListOfCityBasedOnCountry(long? countryId);
         public Task<JsonResult> getUser(long? userId);
@@ -27,6 +29,8 @@ namespace CI_API.Application.ServiceInterface
         public Task<JsonResult> deleteMission(long? missionId);
         public Task<JsonResult> AddEditCms(CmsPage cms);
         public Task<JsonResult> DeleteCms(long? cmsId);
+        public Task<JsonResult> ApproveRejectMissionApplication(MissionApplicationViewModel application);
+        public Task<JsonResult> ApproveRejectDeleteStory(AdminPanelStoryViewModel storyData);
 
         #endregion
     }

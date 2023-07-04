@@ -63,6 +63,18 @@ namespace CI_API.Common.CommonModels
         public static string CmsDeletedSuccess = "CMS Page deleted successfully";
         #endregion
 
+        #region missionApplication
+        public static string MissionApplicationApproved = "Mission application approved successfully";
+        public static string MissionApplicationRejected = "Mission application is rejected";
+
+        #endregion
+        #region storyAdmin
+        public static string StoryApproved = "Story approved successfully";
+        public static string StoryRejected = "Story is rejected";
+        public static string StoryDeleted = "Story is deleted!!";
+
+        #endregion
+
         #endregion
 
         #region Volunteer-Mission
