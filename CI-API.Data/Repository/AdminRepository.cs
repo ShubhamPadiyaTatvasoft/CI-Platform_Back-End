@@ -1114,7 +1114,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (search == null)
+                if (String.IsNullOrEmpty(search))
                 {
                     List<Banner> banners = await Task.FromResult(cIDbContext.Banners.ToList());
                     return new JsonResult(new apiResponse<List<Banner>> { StatusCode = responseStatusCode.Success, Data = banners, Result = true });
