@@ -57,6 +57,14 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetAllBanners(search);
         }
 
+        #endregion
+
+        #region GetAllThemes
+        public async Task<JsonResult> GetAllThemes(string? search)
+        {
+            return await AdminRepository.GetAllThemes(search);
+        }
+
         #endregion 
 
         #region GetAllMissionApplication
@@ -169,11 +177,30 @@ namespace CI_API.Application.Services
         {
             return await AdminRepository.GetBannerDataFromId(bannerId);
         }
-        #endregion
+        #endregion 
         #region DeleteUser
         public async Task<JsonResult> DeleteBanner(long? bannerId) {
 
             return await AdminRepository.DeleteBanner(bannerId);
+        }
+        #endregion
+        #region GetThemeData
+        public async Task<JsonResult> GetThemeData(long? themeId)
+        {
+            return await AdminRepository.GetThemeData(themeId);
+        }
+        #endregion
+        #region AddUpdateBanner
+        public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
+        {
+            return await AdminRepository.AddUpdateTheme(themeData);
+        }
+        #endregion
+        #region DeleteTheme
+        public async Task<JsonResult> DeleteTheme(long? themeId)
+        {
+
+            return await AdminRepository.DeleteTheme(themeId);
         }
         #endregion
 

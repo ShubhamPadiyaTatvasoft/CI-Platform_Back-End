@@ -83,6 +83,13 @@ namespace CI_API.Common.CommonModels
         public static string BannerDeletedSuccess = "Banner deleted successfully";
         #endregion
 
+        #region theme
+        public static string ThemeAddedSuccess = "Theme added successfully";
+        public static string ThemeUpdateSuccess = "Theme updated successfully";
+        public static string ThemeDeletedSuccess = "Theme deleted successfully";
+        public static string DeleteThemeBasedMissionFirst = "Please delete theme based mission first then you can delete or update the theme status";
+        #endregion
+
         #endregion
 
         #region Volunteer-Mission

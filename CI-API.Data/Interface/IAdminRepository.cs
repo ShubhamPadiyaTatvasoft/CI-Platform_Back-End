@@ -19,6 +19,7 @@ namespace CI_API.Data.Interface
         public Task<JsonResult> GetAllMissionApplication(string? search);
         public Task<JsonResult> GetAllStories(string? search);
         public Task<JsonResult> GetAllBanners(string? search);
+        public Task<JsonResult> GetAllThemes(string? search);
         public Task<JsonResult> getListOfCountryTheme();
         public Task<JsonResult> getListOfCityBasedOnCountry(long? countryId);
         public Task<JsonResult> getUser(long? userId);
@@ -35,6 +36,9 @@ namespace CI_API.Data.Interface
         public Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData);
         public Task<JsonResult> GetBannerDataFromId(long? cmsId);
         public Task<JsonResult> DeleteBanner(long? bannerId);
+        public Task<JsonResult> GetThemeData(long? themeId);
+        public Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData);
+        public Task<JsonResult> DeleteTheme(long? themeId);
 
 
         #endregion
