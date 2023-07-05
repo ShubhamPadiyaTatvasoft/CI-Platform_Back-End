@@ -34,7 +34,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (search != "")
+                if (String.IsNullOrEmpty(search))
                 {
                     List<User> userData = await Task.FromResult(cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList());
 
@@ -246,7 +246,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                if (search != null)
+                if (String.IsNullOrEmpty(search))
                 {
 
                     List<Mission> AllMission = await Task.FromResult(cIDbContext.Missions.Where(M => M.Title.Contains(search) || M.Theme.Title.Contains(search)).ToList());
@@ -705,6 +705,7 @@ namespace CI_API.Data.Repository
             }
         }
         #endregion
+
         #endregion
 
         #region CMSPages
@@ -714,7 +715,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                if (search != null)
+                if (String.IsNullOrEmpty(search))
                 {
 
                     List<CmsPage>? cmsPages = await Task.FromResult(cIDbContext.CmsPages.Where(CM => CM.Title.Contains(search) || CM.Slug.Contains(search) || CM.Status.Contains(search)).ToList());
@@ -853,7 +854,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (search == null)
+                if (String.IsNullOrEmpty(search))
                 {
                     var missionApplications = await Task.FromResult(from missionApplication in cIDbContext.MissionApplications.Where(MA => MA.ApprovalStatus == StaticCode.missionApplicationPending)
                                                                     join mission in cIDbContext.Missions on missionApplication.MissionId equals mission.MissionId
