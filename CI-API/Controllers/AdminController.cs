@@ -368,7 +368,7 @@ namespace CI_API.Controllers
         /// <param name="bannerId"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("GetBannerDataFromId")]
+        [HttpGet("GetBannerDataFromId/{bannerId}")]
         public async Task<JsonResult> GetBannerDataFromId(long? bannerId)
         {
             if (bannerId != 0)
@@ -387,8 +387,8 @@ namespace CI_API.Controllers
         /// <param name="bannerId"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("DeleteBanner")]
-        public async Task<JsonResult> DeleteBanner([FromBody] long? bannerId)
+        [HttpDelete("DeleteBanner")]
+        public async Task<JsonResult> DeleteBanner( long? bannerId)
         {
             if (bannerId != 0)
             {
