@@ -332,7 +332,7 @@ namespace CI_API.Controllers
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-        [Authorize]
+       
         [HttpGet("GetAllBanners")]
         public async Task<JsonResult> GetAllBanners(string? search)
         {
