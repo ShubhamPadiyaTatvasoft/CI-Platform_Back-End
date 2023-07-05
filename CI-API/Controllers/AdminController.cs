@@ -381,6 +381,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region DeleteBanner
+        /// <summary>
+        /// for deleting the banner data
+        /// </summary>
+        /// <param name="bannerId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("DeleteBanner")]
         public async Task<JsonResult> DeleteBanner([FromBody] long? bannerId)
