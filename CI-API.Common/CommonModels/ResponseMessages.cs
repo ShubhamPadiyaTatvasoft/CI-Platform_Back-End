@@ -68,11 +68,19 @@ namespace CI_API.Common.CommonModels
         public static string MissionApplicationRejected = "Mission application is rejected";
 
         #endregion
+
         #region storyAdmin
         public static string StoryApproved = "Story approved successfully";
         public static string StoryRejected = "Story is rejected";
         public static string StoryDeleted = "Story is deleted!!";
 
+        #endregion
+
+        #region bannerAdmin
+        public static string BannerSortOrderAlreadyExist = "Please add different sortOrder banner for this sort order already exists";
+        public static string BannerAddedSuccess = "Banner added successfully";
+        public static string BannerUpdateSuccess = "Banner updated successfully";
+        public static string BannerDeletedSuccess = "Banner deleted successfully";
         #endregion
 
         #endregion

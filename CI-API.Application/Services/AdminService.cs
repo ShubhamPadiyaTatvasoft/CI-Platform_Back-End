@@ -49,13 +49,23 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetAllMissionApplication(search);
         }
 
+        #endregion  
+
+        #region GetAllBanners
+        public async Task<JsonResult> GetAllBanners(string? search)
+        {
+            return await AdminRepository.GetAllBanners(search);
+        }
+
         #endregion 
+
         #region GetAllMissionApplication
         public async Task<JsonResult> GetAllStories(string? search)
         {
             return await AdminRepository.GetAllStories(search);
         }
         #endregion
+
         #region GetListOfCityCountryThemeSkills
         public async Task<JsonResult> getListOfCountryTheme()
         {
@@ -89,8 +99,7 @@ namespace CI_API.Application.Services
 
             return await AdminRepository.deleteUser(userId);
         }
-        #endregion
-
+        #endregion    
         #region AddUpdateMission
         public async Task<JsonResult> addUpdateMission(MissionDataViewModel missionDataViewModel)
         {
@@ -125,7 +134,6 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetCmsDataFromId(cmsId);
         }
         #endregion
-
         #region DeleteCms
         public async Task<JsonResult> DeleteCms(long? cmsId)
         {
@@ -149,6 +157,27 @@ namespace CI_API.Application.Services
         }
         #endregion
 
-       
+        #region AddUpdateBanner
+        public async Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData)
+        {
+            return await AdminRepository.AddUpdateBanner(bannerData);
+        }
+        #endregion
+
+        #region GetBannerDataFromId
+        public async Task<JsonResult> GetBannerDataFromId(long? bannerId)
+        {
+            return await AdminRepository.GetBannerDataFromId(bannerId);
+        }
+        #endregion
+        #region DeleteUser
+        public async Task<JsonResult> DeleteBanner(long? bannerId) {
+
+            return await AdminRepository.DeleteBanner(bannerId);
+        }
+        #endregion
+
+
+
     }
 }
