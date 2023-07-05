@@ -325,6 +325,82 @@ namespace CI_API.Controllers
 
         #endregion
 
+        #region banner
+        #region GetAllBanners
+        /// <summary>
+        /// return all the banner's data
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+       
+        [HttpGet("GetAllBanners")]
+        public async Task<JsonResult> GetAllBanners(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllBanners(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+        #region AddUpdateBanner
+        /// <summary>
+        /// for adding or updating the banner data
+        /// </summary>
+        /// <param name="bannerData"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("AddUpdateBanner")]
+        public async Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddUpdateBanner(bannerData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region GetBannerDataFromId
+        /// <summary>
+        /// get the banner data from its id
+        /// </summary>
+        /// <param name="bannerId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetBannerDataFromId/{bannerId}")]
+        public async Task<JsonResult> GetBannerDataFromId(long? bannerId)
+        {
+            if (bannerId != 0)
+            {
+                return await AdminService.GetBannerDataFromId(bannerId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #region DeleteBanner
+        /// <summary>
+        /// for deleting the banner data
+        /// </summary>
+        /// <param name="bannerId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("DeleteBanner")]
+        public async Task<JsonResult> DeleteBanner( long? bannerId)
+        {
+            if (bannerId != 0)
+            {
+                return await AdminService.DeleteBanner(bannerId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #endregion
+
         #region common
 
         #region GetListOfCityCountryThemeSkills

@@ -18,6 +18,7 @@ namespace CI_API.Application.ServiceInterface
         public Task<JsonResult> GetAllCMSPage(string? search);
         public Task<JsonResult> GetAllMissionApplication(string? search);
         public Task<JsonResult> GetAllStories(string? search);
+        public Task<JsonResult> GetAllBanners(string? search);
         public Task<JsonResult> getListOfCountryTheme();
         public Task<JsonResult> getListOfCityBasedOnCountry(long? countryId);
         public Task<JsonResult> getUser(long? userId);
@@ -31,8 +32,9 @@ namespace CI_API.Application.ServiceInterface
         public Task<JsonResult> DeleteCms(long? cmsId);
         public Task<JsonResult> ApproveRejectMissionApplication(MissionApplicationViewModel application);
         public Task<JsonResult> ApproveRejectDeleteStory(AdminPanelStoryViewModel storyData);
-
-        
+        public Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData);
+        public Task<JsonResult> GetBannerDataFromId(long? bannerId);
+        public Task<JsonResult> DeleteBanner(long? bannerId);
 
         #endregion
 
