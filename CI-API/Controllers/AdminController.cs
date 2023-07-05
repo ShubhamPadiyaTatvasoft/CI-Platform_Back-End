@@ -326,13 +326,14 @@ namespace CI_API.Controllers
         #endregion
 
         #region banner
+
         #region GetAllBanners
         /// <summary>
         /// return all the banner's data
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-       
+
         [HttpGet("GetAllBanners")]
         public async Task<JsonResult> GetAllBanners(string? search)
         {
@@ -343,6 +344,7 @@ namespace CI_API.Controllers
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
         }
         #endregion
+
         #region AddUpdateBanner
         /// <summary>
         /// for adding or updating the banner data
@@ -388,7 +390,7 @@ namespace CI_API.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpDelete("DeleteBanner")]
-        public async Task<JsonResult> DeleteBanner( long? bannerId)
+        public async Task<JsonResult> DeleteBanner(long? bannerId)
         {
             if (bannerId != 0)
             {
@@ -400,6 +402,64 @@ namespace CI_API.Controllers
         #endregion
 
         #endregion
+
+        #region theme
+
+        #region GetAllThemes
+        [Authorize]
+        [HttpGet("GetAllThemes")]
+        public async Task<JsonResult> GetAllThemes(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllThemes(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region GetThemeData
+        [Authorize]
+        [HttpGet("GetThemeData/{themeId}")]
+        public async Task<JsonResult> GetThemeData(long? themeId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetThemeData(themeId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region AddUpdateTheme
+        [Authorize]
+        [HttpPost("AddUpdateTheme")]
+        public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddUpdateTheme(themeData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region DeleteTheme
+        [Authorize]
+        [HttpDelete("DeleteTheme/{themeId}")]
+        public async Task<JsonResult> DeleteTheme(long? themeId)
+        {
+            if (ModelState.IsValid)
+            {
+                //return null;
+                return await AdminService.DeleteTheme(themeId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #endregion
+
 
         #region common
 
