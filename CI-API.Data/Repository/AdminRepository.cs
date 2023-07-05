@@ -34,7 +34,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (String.IsNullOrEmpty(search))
+                if (!String.IsNullOrEmpty(search))
                 {
                     List<User> userData = await Task.FromResult(cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList());
 
@@ -246,7 +246,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                if (String.IsNullOrEmpty(search))
+                if (!String.IsNullOrEmpty(search))
                 {
 
                     List<Mission> AllMission = await Task.FromResult(cIDbContext.Missions.Where(M => M.Title.Contains(search) || M.Theme.Title.Contains(search)).ToList());
