@@ -37,28 +37,35 @@ namespace CI_API.Data.Repository
             {
 
                 User loginData = await Task.FromResult(cIDbContext.Users.Where(U => U.Email == userDetail.email).FirstOrDefault());
-                
-                byte[] byteForPassword = Convert.FromBase64String(loginData.Password);
-                string decryptedPassword = Encoding.ASCII.GetString(byteForPassword);
-
-                if (loginData != null && decryptedPassword == userDetail.password)
-                {
-                    string token = "";
-                    token = CommonMethods.CreateJwt(loginData);
-                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.LoginSuccess, StatusCode = responseStatusCode.Success, Data = token, Result = true });
-
-                }
-                else
+                if (loginData != null)
                 {
 
-                    if (await Task.FromResult(cIDbContext.Users.Where(U => U.Email == userDetail.email)) == null)
+                    byte[] byteForPassword = Convert.FromBase64String(loginData.Password);
+                    string decryptedPassword = Encoding.ASCII.GetString(byteForPassword);
+
+                    if (loginData != null && decryptedPassword == userDetail.password)
                     {
-                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.UserNotFound, StatusCode = responseStatusCode.NotFound, Result = false });
+                        string token = "";
+                        token = CommonMethods.CreateJwt(loginData);
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.LoginSuccess, StatusCode = responseStatusCode.Success, Data = token, Result = true });
+
                     }
                     else
                     {
-                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InvalidLoginCredentials, StatusCode = responseStatusCode.InvalidData, Result = false });
+
+                        if (await Task.FromResult(cIDbContext.Users.Where(U => U.Email == userDetail.email)) == null)
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.UserNotFound, StatusCode = responseStatusCode.NotFound, Result = false });
+                        }
+                        else
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InvalidLoginCredentials, StatusCode = responseStatusCode.InvalidData, Result = false });
+                        }
                     }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InvalidLoginCredentials, StatusCode = responseStatusCode.InvalidData, Result = false });
                 }
             }
             catch

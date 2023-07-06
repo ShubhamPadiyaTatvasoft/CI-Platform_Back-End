@@ -8,6 +8,8 @@ namespace CI_API.Common.CommonModels
 {
     public class ResponseMessages
     {
+
+        
         #region ResponseMessages
 
         #region Registration
@@ -34,18 +36,61 @@ namespace CI_API.Common.CommonModels
 
         #region CommonErrorMessage
         public static string InternalServerError = "Internal Server error";
-        
+        public static string DataNotFound = "Data Not Found";
 
         #endregion
 
         #region AdminPanel
+
+        #region User
         public static string UserNotUpdated = "User data not updated please check details again and try after sometime";
         public static string UserNotDeleted = "User data not deleted please check details again and try after sometime";
         public static string UserUpdatedSuccess = "User data updated successfully";
         public static string UserDeletedSuccess = "User data deleted successfully";
         #endregion
 
-        
+        #region Mission
+        public static string MissionAddedSuccessfully = "New mission added successfully";
+        public static string MissionUpdatedSuccessfully = "Mission updated successfully";
+        public static string MissionDeletedSuccessfully = "Mission deleted successfully";
+        public static string MissionNotUpdatedSuccessfully = "Mission not updated ";
+
+        #endregion
+
+        #region CMS
+        public static string CmsAddedSuccess = "New CMS Page added successfully";
+        public static string CmsUpdateSuccess = "CMS Page updated successfully";
+        public static string CmsDeletedSuccess = "CMS Page deleted successfully";
+        #endregion
+
+        #region missionApplication
+        public static string MissionApplicationApproved = "Mission application approved successfully";
+        public static string MissionApplicationRejected = "Mission application is rejected";
+
+        #endregion
+
+        #region storyAdmin
+        public static string StoryApproved = "Story approved successfully";
+        public static string StoryRejected = "Story is rejected";
+        public static string StoryDeleted = "Story is deleted!!";
+
+        #endregion
+
+        #region bannerAdmin
+        public static string BannerSortOrderAlreadyExist = "Please add different sortOrder banner for this sort order already exists";
+        public static string BannerAddedSuccess = "Banner added successfully";
+        public static string BannerUpdateSuccess = "Banner updated successfully";
+        public static string BannerDeletedSuccess = "Banner deleted successfully";
+        #endregion
+
+        #region theme
+        public static string ThemeAddedSuccess = "Theme added successfully";
+        public static string ThemeUpdateSuccess = "Theme updated successfully";
+        public static string ThemeDeletedSuccess = "Theme deleted successfully";
+        public static string DeleteThemeBasedMissionFirst = "Please delete theme based mission first then you can delete or update the theme status";
+        #endregion
+
+        #endregion
 
         #region Volunteer-Mission
         public static string CommentDone = "Your comment has been sent successfully.";

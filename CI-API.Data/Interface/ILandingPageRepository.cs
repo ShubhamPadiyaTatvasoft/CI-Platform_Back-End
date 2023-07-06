@@ -18,6 +18,8 @@ namespace CI_API.Data.Interface
         public Task<JsonResult> FavMissionUpdated(long MissionId, long UserId);
 
         public Task<JsonResult> RecommendedMission(long MissionId, long FromUserId, long ToUserId, string Toemail);
+
+        public Task<JsonResult> GetUserListForRecommendation(long MissionId, long LoginUserId);
         #endregion
     }
 }

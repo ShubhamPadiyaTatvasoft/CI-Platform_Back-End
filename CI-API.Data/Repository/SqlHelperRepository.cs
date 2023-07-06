@@ -25,5 +25,10 @@ namespace CI_API.Data.Repository
         {
             return await _connection.ExecuteAsync(spName, parameters, commandType: CommandType.StoredProcedure);
         }
+
+        public async Task<IEnumerable<T>> GetData<T, P>(string spName, P parameters)
+        {
+            return await _connection.QueryAsync<T>(spName, parameters, commandType: CommandType.StoredProcedure);
+        }
     }
 }

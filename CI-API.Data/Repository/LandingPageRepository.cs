@@ -6,6 +6,7 @@ using CI_API.Core.ViewModel;
 using CI_API.Data.Interface;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Policy;
@@ -80,7 +81,8 @@ namespace CI_API.Data.Repository
 
                 if (!string.IsNullOrWhiteSpace(filterData.Search))
                 {
-                    query = query.Where(mission => mission.Title.ToLower().Contains(filterData.Search) || mission.ShortDescription.ToLower().Contains(filterData.Search));
+                    query = query.Where(mission => mission.Title.ToLower().Contains(filterData.Search));
+                    query = query.Where(mission => EF.Functions.Like(mission.ShortDescription, $"%{filterData.Search}%"));
                 }
 
                 var missionData = await Task.FromResult(query.Select(mission => new MissionCardViewModel()
@@ -95,18 +97,19 @@ namespace CI_API.Data.Repository
                     Seatleft = (long)(mission.TotalSeats - mission.MissionApplications.Count(mission => mission.ApprovalStatus == "approve")),
                     AlreadyVolunteer = mission.MissionApplications.Count(mission => mission.ApprovalStatus == "approve"),
                     MissionImagePath = mission.MissionMedia.FirstOrDefault(image => image.MediaType == "PNG").MediaPath,
-                    TargetGoalValue = int.Parse(_cIDbContext.GoalMissions.FirstOrDefault(missions => missions.MissionId == query.FirstOrDefault(mission => mission.MissionType == "GOAL").MissionId).GoalValue),
+                    TargetGoalValue = (_cIDbContext.GoalMissions.First(missions => mission.MissionType == "GOAL" && missions.MissionId == query.FirstOrDefault(mission => mission.MissionType == "GOAL").MissionId).GoalValue == null ? 0 : int.Parse(_cIDbContext.GoalMissions.First(missions => mission.MissionType == "GOAL" && missions.MissionId == query.FirstOrDefault(mission => mission.MissionType == "GOAL").MissionId).GoalValue)),
                     AchieveGoalValue = (int)mission.Timesheets.Where(goal => goal.Action != null).Sum(goal => goal.Action),
                 }).ToList());
 
-                return new JsonResult(new apiResponse<List<MissionCardViewModel>> 
-                { 
-                    Message = ResponseMessages.Success , 
-                    Data = missionData, Result = true, 
-                    StatusCode = responseStatusCode.Success 
+                return new JsonResult(new apiResponse<List<MissionCardViewModel>>
+                {
+                    Message = ResponseMessages.Success,
+                    Data = missionData,
+                    Result = true,
+                    StatusCode = responseStatusCode.Success
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new JsonResult(new apiResponse<string>
                 {
@@ -123,6 +126,16 @@ namespace CI_API.Data.Repository
         {
             try
             {
+                if (MissionId < 1 || UserId < 1)
+                {
+                    return new JsonResult(new apiResponse<string>
+                    {
+                        Message = ResponseMessages.InvalidData,
+                        StatusCode = responseStatusCode.RequestFailed,
+                        Result = false
+                    });
+                }
+
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("MissionId", MissionId);
@@ -166,9 +179,18 @@ namespace CI_API.Data.Repository
         #region RecommendedMissionMethod
         public async Task<JsonResult> RecommendedMission(long MissionId, long FromUserId, long ToUserId, string Toemail)
         {
-
             try
             {
+                if (MissionId < 1 || FromUserId < 1 || ToUserId < 1 || string.IsNullOrEmpty(Toemail))
+                {
+                    return new JsonResult(new apiResponse<string>
+                    {
+                        Message = ResponseMessages.InvalidData,
+                        StatusCode = responseStatusCode.RequestFailed,
+                        Result = false
+                    });
+                }
+
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("MissionId", MissionId);
@@ -182,7 +204,7 @@ namespace CI_API.Data.Repository
                     SendmailtoFriends(Toemail, MissionId);
                     return new JsonResult(new apiResponse<string>
                     {
-                        Message= ResponseMessages.RecommendedSuccess,
+                        Message = ResponseMessages.RecommendedSuccess,
                         StatusCode = responseStatusCode.Success,
                         Result = true
                     });
@@ -239,10 +261,64 @@ namespace CI_API.Data.Repository
             };
 
             MailMessage message = new MailMessage(emailfrom, toEmail);
-            message.Subject = "Password Reset Link";
+            message.Subject = "Mission Recommendation Link";
             message.Body = body;
             message.IsBodyHtml = true;
             smtp.Send(message);
+        }
+        #endregion
+
+        #region
+        public async Task<JsonResult> GetUserListForRecommendation(long MissionId, long LoginUserId)
+        {
+            try
+            {
+                if (MissionId < 1 || LoginUserId < 1)
+                {
+                    return new JsonResult(new apiResponse<string>
+                    {
+                        Message = ResponseMessages.InvalidData,
+                        StatusCode = responseStatusCode.RequestFailed,
+                        Result = false
+                    });
+                }
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("MissionId", MissionId);
+                parameters.Add("LoginUserId", LoginUserId);
+
+                IEnumerable<User> userList = await sqlHelper.GetData<User, DynamicParameters>("RecommendedUsers", parameters);
+
+                if (userList != null)
+                {
+                    return new JsonResult(new apiResponse<IEnumerable<User>>
+                    {
+                        Message = ResponseMessages.Success,
+                        Data = userList,
+                        Result = true,
+                        StatusCode = responseStatusCode.Success
+                    });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<IEnumerable<User>>
+                    {
+                        Message = ResponseMessages.DataNotFound,
+                        Result = true,
+                        StatusCode = responseStatusCode.NotFound
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new apiResponse<string>
+                {
+                    Message = ResponseMessages.InternalServerError,
+                    StatusCode = responseStatusCode.BadRequest,
+                    Result = false
+                });
+            }
         }
         #endregion
     }
