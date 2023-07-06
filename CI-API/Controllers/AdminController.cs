@@ -451,7 +451,6 @@ namespace CI_API.Controllers
         {
             if (ModelState.IsValid)
             {
-                //return null;
                 return await AdminService.DeleteTheme(themeId);
             }
             return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
@@ -460,6 +459,61 @@ namespace CI_API.Controllers
 
         #endregion
 
+        #region skill
+
+        #region GetAllSkills
+        [Authorize]
+        [HttpGet("GetAllSkills")]
+        public async Task<JsonResult> GetAllSkills(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllSkills(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region GetSkillData
+        [Authorize]
+        [HttpGet("GetSkillData/{skillId}")]
+        public async Task<JsonResult> GetSkillData(long? skillId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetSkillData(skillId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region AddUpdateSkill
+        [Authorize]
+        [HttpPost("AddUpdateSkill")]
+        public async Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel themeData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddUpdateSkill(themeData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region DeleteSkill
+        [Authorize]
+        [HttpDelete("DeleteSkill/{skillId}")]
+        public async Task<JsonResult> DeleteSkill(long? skillId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.DeleteSkill(skillId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #endregion
 
         #region common
 

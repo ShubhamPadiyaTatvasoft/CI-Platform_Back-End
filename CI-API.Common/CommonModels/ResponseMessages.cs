@@ -90,6 +90,13 @@ namespace CI_API.Common.CommonModels
         public static string DeleteThemeBasedMissionFirst = "Please delete theme based mission first then you can delete or update the theme status";
         #endregion
 
+        #region skill
+        public static string SkillAddedSuccess = "Skill added successfully";
+        public static string SkillUpdateSuccess = "Skill updated successfully";
+        public static string SkillDeletedSuccess = "Skill deleted successfully";
+        public static string DeleteSkillBasedMissionFirst = "Please delete skill based mission first then you can delete or update the skill status";
+        #endregion
+
         #endregion
 
         #region Volunteer-Mission
