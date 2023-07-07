@@ -406,6 +406,11 @@ namespace CI_API.Controllers
         #region theme
 
         #region GetAllThemes
+        /// <summary>
+        /// return all themes's data
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetAllThemes")]
         public async Task<JsonResult> GetAllThemes(string? search)
@@ -419,6 +424,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region GetThemeData
+        /// <summary>
+        /// return theme data from its's id
+        /// </summary>
+        /// <param name="themeId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetThemeData/{themeId}")]
         public async Task<JsonResult> GetThemeData(long? themeId)
@@ -432,6 +442,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region AddUpdateTheme
+        /// <summary>
+        /// add or update the theme data
+        /// </summary>
+        /// <param name="themeData"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("AddUpdateTheme")]
         public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
@@ -445,6 +460,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region DeleteTheme
+        /// <summary>
+        /// delete theme data
+        /// </summary>
+        /// <param name="themeId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("DeleteTheme/{themeId}")]
         public async Task<JsonResult> DeleteTheme(long? themeId)
@@ -462,6 +482,11 @@ namespace CI_API.Controllers
         #region skill
 
         #region GetAllSkills
+        /// <summary>
+        /// get all skills's data
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetAllSkills")]
         public async Task<JsonResult> GetAllSkills(string? search)
@@ -475,6 +500,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region GetSkillData
+        /// <summary>
+        /// get skill data from it's id
+        /// </summary>
+        /// <param name="skillId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetSkillData/{skillId}")]
         public async Task<JsonResult> GetSkillData(long? skillId)
@@ -488,6 +518,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region AddUpdateSkill
+        /// <summary>
+        /// add or update the skill data
+        /// </summary>
+        /// <param name="themeData"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("AddUpdateSkill")]
         public async Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel themeData)
@@ -501,6 +536,11 @@ namespace CI_API.Controllers
         #endregion
 
         #region DeleteSkill
+        /// <summary>
+        /// delete skill data
+        /// </summary>
+        /// <param name="skillId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("DeleteSkill/{skillId}")]
         public async Task<JsonResult> DeleteSkill(long? skillId)
@@ -517,7 +557,7 @@ namespace CI_API.Controllers
 
         #region common
 
-        #region GetListOfCityCountryThemeSkills
+        #region GetListOfCtyCountryThemeSkills
         /// <summary>
         /// get all the country theme skills
         /// </summary>
