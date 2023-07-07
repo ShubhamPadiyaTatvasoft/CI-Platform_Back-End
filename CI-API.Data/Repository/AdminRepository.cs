@@ -1334,7 +1334,7 @@ namespace CI_API.Data.Repository
         }
         #endregion
 
-        #region AddUpdateBanner
+        #region AddUpdateTheme
         public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
         {
             try
@@ -1433,6 +1433,164 @@ namespace CI_API.Data.Repository
 
         }
         #endregion
+
+        #endregion
+
+        #region skill
+
+        #region GetAllSkills
+        public async Task<JsonResult> GetAllSkills(string? search)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(search))
+                {
+                    List<Skill> allSkills = cIDbContext.Skills.ToList();
+                    return new JsonResult(new apiResponse<List<Skill>> { StatusCode = responseStatusCode.Success, Data = allSkills, Result = true });
+                }
+                else
+                {
+                    List<Skill> allSkills = cIDbContext.Skills.Where(S => S.SkillName.Contains(search)).ToList();
+                    return new JsonResult(new apiResponse<List<Skill>> { StatusCode = responseStatusCode.Success, Data = allSkills, Result = true });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+        }
+
+        #endregion
+
+        #region GetSkillData
+        public async Task<JsonResult> GetSkillData(long? skillId)
+        {
+            try
+            {
+                if (skillId != 0)
+                {
+                    Skill? skillDataForEdit = cIDbContext.Skills.Where(S => S.SkillId== skillId).FirstOrDefault();
+                    if (skillDataForEdit != null)
+                    {
+                        return new JsonResult(new apiResponse<Skill> { StatusCode = responseStatusCode.Success, Data = skillDataForEdit, Result = false });
+
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+        }
+        #endregion
+
+        #region AddUpdateSkill
+        public async Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel skillData)
+        {
+            try
+            {
+                if (skillData.skillId != 0)
+                {
+                    Skill? skillToBeUpdated = cIDbContext.Skills.Where(MT => MT.SkillId == skillData.skillId).FirstOrDefault();
+                    if (skillToBeUpdated != null)
+                    {
+                        skillToBeUpdated.SkillName = skillData.skillName;
+                        if (skillData.skillStatus == "InActive")
+                        {
+                            List<MissionSkill>? skillBasedMission = cIDbContext.MissionSkills.Where(MS => MS.SkillId == skillData.skillId).ToList();
+                            if (skillBasedMission.Count() > 0)
+                            {
+                                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.DeleteSkillBasedMissionFirst, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+                            }
+                        }
+                        skillToBeUpdated.Status = skillData.skillStatus;
+                        skillToBeUpdated.UpdatedAt = DateTime.Now;
+                        skillToBeUpdated.DeletedAt = null;
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+                }
+                else
+                {
+                    Skill newSkill = new()
+                    {
+                        SkillName = skillData.skillName,
+                        Status = skillData.skillStatus,
+                    };
+                    cIDbContext.Skills.Add(newSkill);
+                }
+                cIDbContext.SaveChanges();
+                if (skillData.skillId == 0)
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.SkillAddedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.SkillUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #region DeleteTheme
+        public async Task<JsonResult> DeleteSkill(long? skillId)
+        {
+
+            try
+            {
+                if (skillId != 0)
+                {
+                    Skill? skillToBeDeleted = cIDbContext.Skills.Where(S=> S.SkillId == skillId).FirstOrDefault();
+                    if (skillToBeDeleted != null)
+                    {
+                        List<MissionSkill>? skillBasedMission = cIDbContext.MissionSkills.Where(MS => MS.SkillId== skillId).ToList();
+                        if (skillBasedMission.Count() > 0)
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.DeleteSkillBasedMissionFirst, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+                        }
+                        else
+                        {
+                            skillToBeDeleted.DeletedAt = DateTime.Now;
+                            skillToBeDeleted.Status = "InActive";
+                            cIDbContext.SaveChanges();
+                        }
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.SkillDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.NotFound, Result = false });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+
+        }
+        #endregion
+
+
         #endregion
 
         #region common

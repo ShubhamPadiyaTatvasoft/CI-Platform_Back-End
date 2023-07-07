@@ -65,6 +65,14 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetAllThemes(search);
         }
 
+        #endregion
+
+        #region GetAllSkills
+        public async Task<JsonResult> GetAllSkills(string? search)
+        {
+            return await AdminRepository.GetAllSkills(search);
+        }
+
         #endregion 
 
         #region GetAllMissionApplication
@@ -190,7 +198,7 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetThemeData(themeId);
         }
         #endregion
-        #region AddUpdateBanner
+        #region AddUpdateTheme
         public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
         {
             return await AdminRepository.AddUpdateTheme(themeData);
@@ -203,8 +211,25 @@ namespace CI_API.Application.Services
             return await AdminRepository.DeleteTheme(themeId);
         }
         #endregion
+        #region GetSkillData
+        public async Task<JsonResult> GetSkillData(long? skillId)
+        {
+            return await AdminRepository.GetSkillData(skillId);
+        }
+        #endregion
+        #region AddUpdateSkill
+        public async Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel skillData)
+        {
+            return await AdminRepository.AddUpdateSkill(skillData);
+        }
+        #endregion
+        #region DeleteSkill
+        public async Task<JsonResult> DeleteSkill(long? skillId)
+        {
 
-
+            return await AdminRepository.DeleteSkill(skillId);
+        }
+        #endregion
 
     }
 }
