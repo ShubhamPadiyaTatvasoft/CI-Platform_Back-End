@@ -110,7 +110,10 @@ namespace CI_API.Common.CommonModels
         public static string RecommendedSuccess = "Email Has Been Sent Successfully";
         public static string InvalidData = "Data Invalid";
         #endregion
+        #region Story
+        public static string MissionNotApplid = "User has not applied to this mission.";
 
+        #endregion
 
         #endregion
     }
