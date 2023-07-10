@@ -18,7 +18,7 @@ namespace CI_API.Controllers
             storyService = _storyService;
         }
 
-        [HttpPost("save-or-update")]
+        [HttpPost("SaveOrUpdate")]
         public async Task<JsonResult> UpsertStory([FromForm] VolunteerStoryFormViewModel volunteerStoryForm,long userId)
         {
       
