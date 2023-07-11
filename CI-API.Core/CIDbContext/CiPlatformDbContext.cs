@@ -127,7 +127,8 @@ public partial class CiPlatformDbContext : DbContext
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("sort_order");
             entity.Property(e => e.Text)
-                .HasColumnType("text")
+                .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("text");
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("datetime")

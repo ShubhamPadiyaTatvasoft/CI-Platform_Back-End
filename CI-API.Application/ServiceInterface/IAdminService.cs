@@ -18,6 +18,9 @@ namespace CI_API.Application.ServiceInterface
         public Task<JsonResult> GetAllCMSPage(string? search);
         public Task<JsonResult> GetAllMissionApplication(string? search);
         public Task<JsonResult> GetAllStories(string? search);
+        public Task<JsonResult> GetAllBanners(string? search);
+        public Task<JsonResult> GetAllThemes(string? search);
+        public Task<JsonResult> GetAllSkills(string? search);
         public Task<JsonResult> getListOfCountryTheme();
         public Task<JsonResult> getListOfCityBasedOnCountry(long? countryId);
         public Task<JsonResult> getUser(long? userId);
@@ -31,11 +34,17 @@ namespace CI_API.Application.ServiceInterface
         public Task<JsonResult> DeleteCms(long? cmsId);
         public Task<JsonResult> ApproveRejectMissionApplication(MissionApplicationViewModel application);
         public Task<JsonResult> ApproveRejectDeleteStory(AdminPanelStoryViewModel storyData);
-
-        
+        public Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData);
+        public Task<JsonResult> GetBannerDataFromId(long? bannerId);
+        public Task<JsonResult> DeleteBanner(long? bannerId);
+        public Task<JsonResult> GetThemeData(long? themeId);
+        public Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData);
+        public Task<JsonResult> DeleteTheme(long? themeId);
+        public Task<JsonResult> GetSkillData(long? skillId);
+        public Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel skillData);
+        public Task<JsonResult> DeleteSkill(long? skillId);
 
         #endregion
-
 
     }
 }

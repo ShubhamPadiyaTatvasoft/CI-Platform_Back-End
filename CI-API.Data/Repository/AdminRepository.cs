@@ -34,7 +34,7 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (search != "")
+                if (!String.IsNullOrEmpty(search))
                 {
                     List<User> userData = await Task.FromResult(cIDbContext.Users.Where(U => U.FirstName.Contains(search) || U.LastName.Contains(search)).ToList());
 
@@ -246,7 +246,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                if (search != null)
+                if (!String.IsNullOrEmpty(search))
                 {
 
                     List<Mission> AllMission = await Task.FromResult(cIDbContext.Missions.Where(M => M.Title.Contains(search) || M.Theme.Title.Contains(search)).ToList());
@@ -705,6 +705,7 @@ namespace CI_API.Data.Repository
             }
         }
         #endregion
+
         #endregion
 
         #region CMSPages
@@ -714,7 +715,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                if (search != null)
+                if (!String.IsNullOrEmpty(search))
                 {
 
                     List<CmsPage>? cmsPages = await Task.FromResult(cIDbContext.CmsPages.Where(CM => CM.Title.Contains(search) || CM.Slug.Contains(search) || CM.Status.Contains(search)).ToList());
@@ -853,27 +854,25 @@ namespace CI_API.Data.Repository
             try
             {
 
-                if (search == null)
+                if (String.IsNullOrEmpty(search))
                 {
-                    var missionApplications = await Task.FromResult(from missionApplication in cIDbContext.MissionApplications
+                    var missionApplications = await Task.FromResult(from missionApplication in cIDbContext.MissionApplications.Where(MA => MA.ApprovalStatus == StaticCode.missionApplicationPending)
                                                                     join mission in cIDbContext.Missions on missionApplication.MissionId equals mission.MissionId
                                                                     join user in cIDbContext.Users on missionApplication.UserId equals user.UserId
-
-
                                                                     select new VolunteerMissionViewModel
                                                                     {
                                                                         missionId = mission.MissionId,
                                                                         missionTitle = mission.Title,
                                                                         userName = user.FirstName + " " + user.LastName,
                                                                         missionApplicationId = missionApplication.MissionApplicationId,
-                                                                        userId = user.UserId,
+                                                                        userId = user.UserId,   
                                                                         appliedDate = missionApplication.AppliedAt,
 
                                                                     });
 
 
-                    return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> {  StatusCode = responseStatusCode.Success, Data = missionApplications.ToList(), Result = true });
-                    
+                    return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> { StatusCode = responseStatusCode.Success, Data = missionApplications.ToList(), Result = true });
+
                 }
                 else
                 {
@@ -895,7 +894,7 @@ namespace CI_API.Data.Repository
 
 
                     return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> { StatusCode = responseStatusCode.Success, Data = missionApplications.ToList(), Result = true });
-                    
+
                 }
             }
             catch
@@ -965,21 +964,21 @@ namespace CI_API.Data.Repository
                 {
                     var missionStories = await Task.FromResult(from story in cIDbContext.Stories.Where(s => s.Status == StaticCode.storyStatusPending)
                                                                join mission in cIDbContext.Missions on story.MissionId equals mission.MissionId
-                                                                    join user in cIDbContext.Users on story.UserId equals user.UserId
+                                                               join user in cIDbContext.Users on story.UserId equals user.UserId
 
 
-                                                                    select new VolunteerMissionViewModel
-                                                                    {
-                                                                        missionTitle = mission.Title,
-                                                                        userName = user.FirstName + " " + user.LastName,
-                                                                        storyTitle=story.Title,
-                                                                        storyId = story.StoryId,
+                                                               select new VolunteerMissionViewModel
+                                                               {
+                                                                   missionTitle = mission.Title,
+                                                                   userName = user.FirstName + " " + user.LastName,
+                                                                   storyTitle = story.Title,
+                                                                   storyId = story.StoryId,
 
-                                                                    });
+                                                               });
 
 
                     return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> { StatusCode = responseStatusCode.Success, Data = missionStories.ToList(), Result = true });
-                    
+
                 }
                 else
                 {
@@ -993,13 +992,13 @@ namespace CI_API.Data.Repository
                                                                    missionTitle = mission.Title,
                                                                    userName = user.FirstName + " " + user.LastName,
                                                                    storyTitle = story.Title,
-                                                                   storyId=story.StoryId,
+                                                                   storyId = story.StoryId,
 
                                                                });
 
 
                     return new JsonResult(new apiResponse<List<VolunteerMissionViewModel>> { StatusCode = responseStatusCode.Success, Data = missionStories.ToList(), Result = true });
-                   
+
                 }
             }
             catch
@@ -1024,11 +1023,11 @@ namespace CI_API.Data.Repository
                     else
                     {
                         Story? storyToBeApprovedOrRejected = await Task.FromResult(cIDbContext.Stories.Where(S => S.StoryId == storyData.storyId).FirstOrDefault());
-                        if(storyToBeApprovedOrRejected != null)
+                        if (storyToBeApprovedOrRejected != null)
                         {
                             storyToBeApprovedOrRejected.UpdatedAt = DateTime.Now;
                             storyToBeApprovedOrRejected.Status = storyData.storyStatus;
-                            if(storyData.storyStatus == StaticCode.storyStatusApprove)
+                            if (storyData.storyStatus == StaticCode.storyStatusApprove)
                             {
                                 storyToBeApprovedOrRejected.PublishedAt = DateTime.Now;
                             }
@@ -1083,7 +1082,7 @@ namespace CI_API.Data.Repository
                         foreach (var item in storyMedia)
                         {
                             cIDbContext.Remove(item);
-                           
+
 
                         }
                     }
@@ -1106,6 +1105,494 @@ namespace CI_API.Data.Repository
 
         #endregion
 
+        #region banner
+
+        #region GetAllBanners
+        public async Task<JsonResult> GetAllBanners(string search)
+        {
+            try
+            {
+
+                if (String.IsNullOrEmpty(search))
+                {
+                    List<Banner> banners = await Task.FromResult(cIDbContext.Banners.ToList());
+                    return new JsonResult(new apiResponse<List<Banner>> { StatusCode = responseStatusCode.Success, Data = banners, Result = true });
+
+                }
+                else
+                {
+                    List<Banner> bannersSearch = await Task.FromResult(cIDbContext.Banners.Where(B => B.Text.Contains(search)).ToList());
+                    return new JsonResult(new apiResponse<List<Banner>> { StatusCode = responseStatusCode.Success, Data = bannersSearch, Result = true });
+
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+        }
+        #endregion
+
+        #region AddUpdateBanner
+        public async Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData)
+        {
+            try
+            {
+                if (bannerData != null)
+                {
+                    if (bannerData.bannerId != 0)
+                    {
+                        Banner? bannerTobeUpdated = cIDbContext.Banners.Where(B => B.SortOrder == bannerData.sortOrder && B.BannerId == bannerData.bannerId).FirstOrDefault();
+                        if (bannerTobeUpdated != null)
+                        {
+                            bannerTobeUpdated.Text = bannerData.bannerText;
+                            bannerTobeUpdated.SortOrder = (int)bannerData.sortOrder;
+                            bannerTobeUpdated.UpdatedAt = DateTime.Now;
+                            bannerTobeUpdated.Image = bannerData.images[0];
+
+                            cIDbContext.SaveChanges();
+                            return new JsonResult(new apiResponse<List<Banner>> { Message = ResponseMessages.BannerUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+                        }
+
+                        else if (cIDbContext.Banners.Where(B => B.SortOrder == bannerData.sortOrder).FirstOrDefault() != null)
+                        {
+                            return new JsonResult(new apiResponse<List<Banner>> { Message = ResponseMessages.BannerSortOrderAlreadyExist, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+                        }
+                        else
+                        {
+                            Banner? bannerTobeUpdatedWithNewSortOrder = cIDbContext.Banners.Where(B => B.BannerId == bannerData.bannerId).FirstOrDefault();
+                            if (bannerTobeUpdatedWithNewSortOrder != null)
+                            {
+                                bannerTobeUpdatedWithNewSortOrder.Text = bannerData.bannerText;
+                                bannerTobeUpdatedWithNewSortOrder.SortOrder = (int)bannerData.sortOrder;
+                                bannerTobeUpdatedWithNewSortOrder.UpdatedAt = DateTime.Now;
+                                bannerTobeUpdatedWithNewSortOrder.Image = bannerData.images[0];
+
+                                cIDbContext.SaveChanges();
+                                return new JsonResult(new apiResponse<List<Banner>> { Message = ResponseMessages.BannerUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                            }
+                            else
+                            {
+                                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                            }
+
+                        }
+
+                    }
+                    else
+                    {
+                        Banner? previousBanner = cIDbContext.Banners.Where(B => B.SortOrder == bannerData.sortOrder).FirstOrDefault();
+                        if (previousBanner == null)
+                        {
+                            Banner newBanner = new()
+                            {
+                                Text = bannerData.bannerText,
+                                Image = bannerData.images[0],
+                                SortOrder = (int?)bannerData.sortOrder,
+                            };
+                            cIDbContext.Banners.Add(newBanner);
+                            cIDbContext.SaveChanges();
+                            return new JsonResult(new apiResponse<List<Banner>> { Message = ResponseMessages.BannerAddedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+                        }
+                        else
+                        {
+                            return new JsonResult(new apiResponse<List<Banner>> { Message = ResponseMessages.BannerSortOrderAlreadyExist, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+
+                        }
+
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+
+        }
+        #endregion
+
+        #region GetBannerDataFromId
+        public async Task<JsonResult> GetBannerDataFromId(long? bannerId)
+        {
+            try
+            {
+                if (bannerId != 0)
+                {
+                    Banner? GetBannerDataFromId = cIDbContext.Banners.Where(B => B.BannerId == bannerId).FirstOrDefault();
+                    return new JsonResult(new apiResponse<Banner> { StatusCode = responseStatusCode.Success, Data = GetBannerDataFromId, Result = true });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+
+        }
+        #endregion
+
+        #region DeleteUser
+        public async Task<JsonResult> DeleteBanner(long? bannerId)
+        {
+            try
+            {
+                if (bannerId != 0)
+                {
+                    Banner? bannerToBeDeleted = cIDbContext.Banners.Where(b => b.BannerId == bannerId).FirstOrDefault();
+                    if (bannerToBeDeleted != null)
+                    {
+                        cIDbContext.Banners.Remove(bannerToBeDeleted);
+                        cIDbContext.SaveChanges();
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.BannerDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+
+        }
+        #endregion
+
+        #endregion
+
+        #region theme
+
+        #region GetAllThemes
+        public async Task<JsonResult> GetAllThemes(string? search)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(search))
+                {
+                    List<MissionTheme> allThemes = cIDbContext.MissionThemes.ToList();
+                    return new JsonResult(new apiResponse<List<MissionTheme>> { StatusCode = responseStatusCode.Success, Data = allThemes, Result = true });
+                }
+                else{
+
+                    List<MissionTheme> allThemes = cIDbContext.MissionThemes.Where(MT=>MT.Title.Contains(search)).ToList();
+                    return new JsonResult(new apiResponse<List<MissionTheme>> { StatusCode = responseStatusCode.Success, Data = allThemes, Result = true });
+                }
+               
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+        }
+
+        #endregion
+
+        #region GetThemeData
+        public async Task<JsonResult> GetThemeData(long? themeId)
+        {
+            try
+            {
+                if (themeId != 0)
+                {
+                    MissionTheme? themeDataForEdit = cIDbContext.MissionThemes.Where(MT => MT.MissionThemeId == themeId).FirstOrDefault();
+                    if(themeDataForEdit!=null)
+                    {
+                        return new JsonResult(new apiResponse<MissionTheme> {  StatusCode = responseStatusCode.Success,Data=themeDataForEdit, Result = false });
+
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+        }
+        #endregion
+
+        #region AddUpdateTheme
+        public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
+        {
+            try
+            {
+                if (themeData.themeId != 0)
+                {
+                    MissionTheme? themeToBeUpdated = cIDbContext.MissionThemes.Where(MT => MT.MissionThemeId == themeData.themeId).FirstOrDefault();
+                    if (themeToBeUpdated != null)
+                    {
+                        themeToBeUpdated.Title = themeData.themeTitle;
+                        if (themeData.themeStatus == "InActive")
+                        {
+                            List<Mission>? themeBasedMission = cIDbContext.Missions.Where(M => M.ThemeId == themeData.themeId).ToList();
+                            if (themeBasedMission.Count() > 0)
+                            {
+                                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.DeleteThemeBasedMissionFirst, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+                            }
+                        }
+
+                       
+                        themeToBeUpdated.Status = themeData.themeStatus;
+                        themeToBeUpdated.UpdatedAt = DateTime.Now;
+                        themeToBeUpdated.DeletedAt = null;
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+                }
+                else
+                {
+                    MissionTheme newMissionTheme = new()
+                    {
+                        Title = themeData.themeTitle,
+                        Status = themeData.themeStatus,
+                    };
+                    cIDbContext.MissionThemes.Add(newMissionTheme);
+                }
+                cIDbContext.SaveChanges();
+                if (themeData.themeId == 0)
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.ThemeAddedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.ThemeUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #region DeleteTheme
+        public async Task<JsonResult> DeleteTheme(long? themeId)
+        {
+
+            try
+            {
+                if (themeId != 0)
+                {
+                    MissionTheme? missionThemeToBeDeleted = cIDbContext.MissionThemes.Where(MT => MT.MissionThemeId == themeId).FirstOrDefault();
+                    if (missionThemeToBeDeleted != null)
+                    {
+                        List<Mission>? themeBasedMission = cIDbContext.Missions.Where(M => M.ThemeId == themeId).ToList();
+                        if (themeBasedMission.Count() > 0)
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.DeleteThemeBasedMissionFirst, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+                        }
+                        else
+                        {
+                            missionThemeToBeDeleted.DeletedAt = DateTime.Now;
+                            missionThemeToBeDeleted.Status = "InActive";
+                            cIDbContext.SaveChanges();
+                        }
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.ThemeDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.NotFound, Result = false });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+
+        }
+        #endregion
+
+        #endregion
+
+        #region skill
+
+        #region GetAllSkills
+        public async Task<JsonResult> GetAllSkills(string? search)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(search))
+                {
+                    List<Skill> allSkills = cIDbContext.Skills.ToList();
+                    return new JsonResult(new apiResponse<List<Skill>> { StatusCode = responseStatusCode.Success, Data = allSkills, Result = true });
+                }
+                else
+                {
+                    List<Skill> allSkills = cIDbContext.Skills.Where(S => S.SkillName.Contains(search)).ToList();
+                    return new JsonResult(new apiResponse<List<Skill>> { StatusCode = responseStatusCode.Success, Data = allSkills, Result = true });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+        }
+
+        #endregion
+
+        #region GetSkillData
+        public async Task<JsonResult> GetSkillData(long? skillId)
+        {
+            try
+            {
+                if (skillId != 0)
+                {
+                    Skill? skillDataForEdit = cIDbContext.Skills.Where(S => S.SkillId== skillId).FirstOrDefault();
+                    if (skillDataForEdit != null)
+                    {
+                        return new JsonResult(new apiResponse<Skill> { StatusCode = responseStatusCode.Success, Data = skillDataForEdit, Result = false });
+
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+        }
+        #endregion
+
+        #region AddUpdateSkill
+        public async Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel skillData)
+        {
+            try
+            {
+                if (skillData.skillId != 0)
+                {
+                    Skill? skillToBeUpdated = cIDbContext.Skills.Where(MT => MT.SkillId == skillData.skillId).FirstOrDefault();
+                    if (skillToBeUpdated != null)
+                    {
+                        skillToBeUpdated.SkillName = skillData.skillName;
+                        if (skillData.skillStatus == "InActive")
+                        {
+                            List<MissionSkill>? skillBasedMission = cIDbContext.MissionSkills.Where(MS => MS.SkillId == skillData.skillId).ToList();
+                            if (skillBasedMission.Count() > 0)
+                            {
+                                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.DeleteSkillBasedMissionFirst, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+                            }
+                        }
+                        skillToBeUpdated.Status = skillData.skillStatus;
+                        skillToBeUpdated.UpdatedAt = DateTime.Now;
+                        skillToBeUpdated.DeletedAt = null;
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                    }
+                }
+                else
+                {
+                    Skill newSkill = new()
+                    {
+                        SkillName = skillData.skillName,
+                        Status = skillData.skillStatus,
+                    };
+                    cIDbContext.Skills.Add(newSkill);
+                }
+                cIDbContext.SaveChanges();
+                if (skillData.skillId == 0)
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.SkillAddedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.SkillUpdateSuccess, StatusCode = responseStatusCode.Success, Result = true });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+            }
+        }
+        #endregion
+
+        #region DeleteTheme
+        public async Task<JsonResult> DeleteSkill(long? skillId)
+        {
+
+            try
+            {
+                if (skillId != 0)
+                {
+                    Skill? skillToBeDeleted = cIDbContext.Skills.Where(S=> S.SkillId == skillId).FirstOrDefault();
+                    if (skillToBeDeleted != null)
+                    {
+                        List<MissionSkill>? skillBasedMission = cIDbContext.MissionSkills.Where(MS => MS.SkillId== skillId).ToList();
+                        if (skillBasedMission.Count() > 0)
+                        {
+                            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.DeleteSkillBasedMissionFirst, StatusCode = responseStatusCode.AlreadyExist, Result = true });
+                        }
+                        else
+                        {
+                            skillToBeDeleted.DeletedAt = DateTime.Now;
+                            skillToBeDeleted.Status = "InActive";
+                            cIDbContext.SaveChanges();
+                        }
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.SkillDeletedSuccess, StatusCode = responseStatusCode.Success, Result = true });
+
+                    }
+                    else
+                    {
+                        return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.NotFound, Result = false });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+                }
+            }
+            catch
+            {
+                return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+            }
+
+        }
+        #endregion
+
+
+        #endregion
+
         #region common
 
         #region GetListOfCountryTheme
@@ -1114,7 +1601,7 @@ namespace CI_API.Data.Repository
         {
             try
             {
-                List<MissionTheme> AllMissionThemes = await Task.FromResult(cIDbContext.MissionThemes.ToList());
+                List<MissionTheme> AllMissionThemes = await Task.FromResult(cIDbContext.MissionThemes.Where(M=>M.Status=="Active").ToList());
                 List<Country> AllCountries = await Task.FromResult(cIDbContext.Countries.ToList());
                 List<Skill> AllSkiils = await Task.FromResult(cIDbContext.Skills.ToList());
 
@@ -1161,6 +1648,7 @@ namespace CI_API.Data.Repository
 
         #endregion
 
-       
+        
+        
     }
 }

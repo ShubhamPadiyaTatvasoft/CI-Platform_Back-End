@@ -20,6 +20,4 @@ public partial class GoalMission
     public DateTime? DeletedAt { get; set; }
 
     public virtual Mission Mission { get; set; } = null!;
-
-  
 }

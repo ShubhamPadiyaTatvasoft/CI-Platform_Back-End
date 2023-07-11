@@ -325,9 +325,239 @@ namespace CI_API.Controllers
 
         #endregion
 
+        #region banner
+
+        #region GetAllBanners
+        /// <summary>
+        /// return all the banner's data
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+
+        [HttpGet("GetAllBanners")]
+        public async Task<JsonResult> GetAllBanners(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllBanners(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region AddUpdateBanner
+        /// <summary>
+        /// for adding or updating the banner data
+        /// </summary>
+        /// <param name="bannerData"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("AddUpdateBanner")]
+        public async Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddUpdateBanner(bannerData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region GetBannerDataFromId
+        /// <summary>
+        /// get the banner data from its id
+        /// </summary>
+        /// <param name="bannerId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetBannerDataFromId/{bannerId}")]
+        public async Task<JsonResult> GetBannerDataFromId(long? bannerId)
+        {
+            if (bannerId != 0)
+            {
+                return await AdminService.GetBannerDataFromId(bannerId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #region DeleteBanner
+        /// <summary>
+        /// for deleting the banner data
+        /// </summary>
+        /// <param name="bannerId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("DeleteBanner")]
+        public async Task<JsonResult> DeleteBanner(long? bannerId)
+        {
+            if (bannerId != 0)
+            {
+                return await AdminService.DeleteBanner(bannerId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+
+        }
+        #endregion
+
+        #endregion
+
+        #region theme
+
+        #region GetAllThemes
+        /// <summary>
+        /// return all themes's data
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetAllThemes")]
+        public async Task<JsonResult> GetAllThemes(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllThemes(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region GetThemeData
+        /// <summary>
+        /// return theme data from its's id
+        /// </summary>
+        /// <param name="themeId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetThemeData/{themeId}")]
+        public async Task<JsonResult> GetThemeData(long? themeId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetThemeData(themeId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region AddUpdateTheme
+        /// <summary>
+        /// add or update the theme data
+        /// </summary>
+        /// <param name="themeData"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("AddUpdateTheme")]
+        public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddUpdateTheme(themeData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region DeleteTheme
+        /// <summary>
+        /// delete theme data
+        /// </summary>
+        /// <param name="themeId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("DeleteTheme/{themeId}")]
+        public async Task<JsonResult> DeleteTheme(long? themeId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.DeleteTheme(themeId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #endregion
+
+        #region skill
+
+        #region GetAllSkills
+        /// <summary>
+        /// get all skills's data
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetAllSkills")]
+        public async Task<JsonResult> GetAllSkills(string? search)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetAllSkills(search);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region GetSkillData
+        /// <summary>
+        /// get skill data from it's id
+        /// </summary>
+        /// <param name="skillId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetSkillData/{skillId}")]
+        public async Task<JsonResult> GetSkillData(long? skillId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.GetSkillData(skillId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region AddUpdateSkill
+        /// <summary>
+        /// add or update the skill data
+        /// </summary>
+        /// <param name="themeData"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("AddUpdateSkill")]
+        public async Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel themeData)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.AddUpdateSkill(themeData);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #region DeleteSkill
+        /// <summary>
+        /// delete skill data
+        /// </summary>
+        /// <param name="skillId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("DeleteSkill/{skillId}")]
+        public async Task<JsonResult> DeleteSkill(long? skillId)
+        {
+            if (ModelState.IsValid)
+            {
+                return await AdminService.DeleteSkill(skillId);
+            }
+            return new JsonResult(new apiResponse<string> { Message = ResponseMessages.InternalServerError, StatusCode = responseStatusCode.BadRequest, Result = false });
+        }
+        #endregion
+
+        #endregion
+
         #region common
 
-        #region GetListOfCityCountryThemeSkills
+        #region GetListOfCtyCountryThemeSkills
         /// <summary>
         /// get all the country theme skills
         /// </summary>

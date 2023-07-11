@@ -49,13 +49,39 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetAllMissionApplication(search);
         }
 
+        #endregion  
+
+        #region GetAllBanners
+        public async Task<JsonResult> GetAllBanners(string? search)
+        {
+            return await AdminRepository.GetAllBanners(search);
+        }
+
+        #endregion
+
+        #region GetAllThemes
+        public async Task<JsonResult> GetAllThemes(string? search)
+        {
+            return await AdminRepository.GetAllThemes(search);
+        }
+
+        #endregion
+
+        #region GetAllSkills
+        public async Task<JsonResult> GetAllSkills(string? search)
+        {
+            return await AdminRepository.GetAllSkills(search);
+        }
+
         #endregion 
+
         #region GetAllMissionApplication
         public async Task<JsonResult> GetAllStories(string? search)
         {
             return await AdminRepository.GetAllStories(search);
         }
         #endregion
+
         #region GetListOfCityCountryThemeSkills
         public async Task<JsonResult> getListOfCountryTheme()
         {
@@ -89,8 +115,7 @@ namespace CI_API.Application.Services
 
             return await AdminRepository.deleteUser(userId);
         }
-        #endregion
-
+        #endregion    
         #region AddUpdateMission
         public async Task<JsonResult> addUpdateMission(MissionDataViewModel missionDataViewModel)
         {
@@ -125,7 +150,6 @@ namespace CI_API.Application.Services
             return await AdminRepository.GetCmsDataFromId(cmsId);
         }
         #endregion
-
         #region DeleteCms
         public async Task<JsonResult> DeleteCms(long? cmsId)
         {
@@ -149,6 +173,63 @@ namespace CI_API.Application.Services
         }
         #endregion
 
-       
+        #region AddUpdateBanner
+        public async Task<JsonResult> AddUpdateBanner(BannerDataViewModel bannerData)
+        {
+            return await AdminRepository.AddUpdateBanner(bannerData);
+        }
+        #endregion
+
+        #region GetBannerDataFromId
+        public async Task<JsonResult> GetBannerDataFromId(long? bannerId)
+        {
+            return await AdminRepository.GetBannerDataFromId(bannerId);
+        }
+        #endregion 
+        #region DeleteUser
+        public async Task<JsonResult> DeleteBanner(long? bannerId) {
+
+            return await AdminRepository.DeleteBanner(bannerId);
+        }
+        #endregion
+        #region GetThemeData
+        public async Task<JsonResult> GetThemeData(long? themeId)
+        {
+            return await AdminRepository.GetThemeData(themeId);
+        }
+        #endregion
+        #region AddUpdateTheme
+        public async Task<JsonResult> AddUpdateTheme(AdminPanelThemeSkillViewModel themeData)
+        {
+            return await AdminRepository.AddUpdateTheme(themeData);
+        }
+        #endregion
+        #region DeleteTheme
+        public async Task<JsonResult> DeleteTheme(long? themeId)
+        {
+
+            return await AdminRepository.DeleteTheme(themeId);
+        }
+        #endregion
+        #region GetSkillData
+        public async Task<JsonResult> GetSkillData(long? skillId)
+        {
+            return await AdminRepository.GetSkillData(skillId);
+        }
+        #endregion
+        #region AddUpdateSkill
+        public async Task<JsonResult> AddUpdateSkill(AdminPanelThemeSkillViewModel skillData)
+        {
+            return await AdminRepository.AddUpdateSkill(skillData);
+        }
+        #endregion
+        #region DeleteSkill
+        public async Task<JsonResult> DeleteSkill(long? skillId)
+        {
+
+            return await AdminRepository.DeleteSkill(skillId);
+        }
+        #endregion
+
     }
 }

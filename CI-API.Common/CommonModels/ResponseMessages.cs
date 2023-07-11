@@ -68,11 +68,33 @@ namespace CI_API.Common.CommonModels
         public static string MissionApplicationRejected = "Mission application is rejected";
 
         #endregion
+
         #region storyAdmin
         public static string StoryApproved = "Story approved successfully";
         public static string StoryRejected = "Story is rejected";
         public static string StoryDeleted = "Story is deleted!!";
 
+        #endregion
+
+        #region bannerAdmin
+        public static string BannerSortOrderAlreadyExist = "Please add different sortOrder banner for this sort order already exists";
+        public static string BannerAddedSuccess = "Banner added successfully";
+        public static string BannerUpdateSuccess = "Banner updated successfully";
+        public static string BannerDeletedSuccess = "Banner deleted successfully";
+        #endregion
+
+        #region theme
+        public static string ThemeAddedSuccess = "Theme added successfully";
+        public static string ThemeUpdateSuccess = "Theme updated successfully";
+        public static string ThemeDeletedSuccess = "Theme deleted successfully";
+        public static string DeleteThemeBasedMissionFirst = "Please delete theme based mission first then you can delete or update the theme status";
+        #endregion
+
+        #region skill
+        public static string SkillAddedSuccess = "Skill added successfully";
+        public static string SkillUpdateSuccess = "Skill updated successfully";
+        public static string SkillDeletedSuccess = "Skill deleted successfully";
+        public static string DeleteSkillBasedMissionFirst = "Please delete skill based mission first then you can delete or update the skill status";
         #endregion
 
         #endregion
