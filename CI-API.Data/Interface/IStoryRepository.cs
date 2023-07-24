@@ -5,6 +5,7 @@ namespace CI_API.Data.Interface
 {
     public interface IStoryRepository
     {
+
         Task<JsonResult> SaveOrUpdateStory(VolunteerStoryFormViewModel volunteerStoryForm);
         Task<JsonResult> GetMissionVolunteerApproved(long userId);
         Task<JsonResult> GetStoryCards();

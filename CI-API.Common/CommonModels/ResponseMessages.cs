@@ -135,9 +135,11 @@ namespace CI_API.Common.CommonModels
         #region Story
         public static string MissionNotApplid = "User has not applied to this mission.";
 
+
         public static string MissionNotFound = "There are no approved missions for you.";
 
         public static string StorySavesuccess = "Successfully saved your story !";
+
         #endregion
 
         #endregion

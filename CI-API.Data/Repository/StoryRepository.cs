@@ -18,6 +18,7 @@ namespace CI_API.Data.Repository
     public class StoryRepository : IStoryRepository
     {
         private readonly CiPlatformDbContext _cIDbContext;
+
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public StoryRepository(CiPlatformDbContext cIDbContext, IWebHostEnvironment webHostEnvironment)
@@ -27,6 +28,7 @@ namespace CI_API.Data.Repository
         }
 
         public async Task<JsonResult> SaveOrUpdateStory(VolunteerStoryFormViewModel volunteerStoryForm)
+
         {
             try
             {
@@ -70,6 +72,7 @@ namespace CI_API.Data.Repository
             };
 
             volunteerStoryInfoViewModel.StoryMediaInfoList = await SaveVolunteerStoryMedia(volunteerStoryForm, story);
+
             return new JsonResult(new apiResponse<VolunteerStoryInfoViewModel> { Message = ResponseMessages.StorySavesuccess, StatusCode = responseStatusCode.Success, Data = volunteerStoryInfoViewModel, Result = true });
         }
 
@@ -90,6 +93,7 @@ namespace CI_API.Data.Repository
                 {
                     StoryId = story.StoryId,
                     StoryPath = "/Images/uploadfiles/" + fileName,
+
                     StoryType = "aaaa"
                 };
                 _cIDbContext.StoryMedia.Add(storyMedium);
