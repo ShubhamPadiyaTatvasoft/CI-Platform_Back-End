@@ -25,8 +25,8 @@ namespace CI_API.Common.CommonMethods
 
                 var identity = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Role,user.Role),
-                new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}")
+                    new Claim(ClaimTypes.Role,user.Role),
+                    new Claim(ClaimTypes.Name,$"{user.FirstName} , {user.LastName} , {user.UserId}")
                 });
 
                 var credetials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -40,7 +40,7 @@ namespace CI_API.Common.CommonMethods
                 var token = jwtTokenHaandler.CreateToken(tokenDescriptor);
                 return jwtTokenHaandler.WriteToken(token);
             }
-            catch 
+            catch
             {
                 return "";
             }

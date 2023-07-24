@@ -6,6 +6,7 @@ using CI_API.Data.Interface;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,19 +18,21 @@ namespace CI_API.Data.Repository
     public class StoryRepository : IStoryRepository
     {
         private readonly CiPlatformDbContext _cIDbContext;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StoryRepository(CiPlatformDbContext cIDbContext)
+        public StoryRepository(CiPlatformDbContext cIDbContext, IWebHostEnvironment webHostEnvironment)
         {
             _cIDbContext = cIDbContext;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<JsonResult> SaveOrUpdateStory(VolunteerStoryFormViewModel volunteerStoryForm, long createdBy)
+        public async Task<JsonResult> SaveOrUpdateStory(VolunteerStoryFormViewModel volunteerStoryForm)
         {
             try
             {
                 if (volunteerStoryForm.Id == 0)
                 {
-                    return await addStory(volunteerStoryForm, createdBy);
+                    return await addStory(volunteerStoryForm);
                 }
                 else
                 {
@@ -42,15 +45,15 @@ namespace CI_API.Data.Repository
             }
         }
 
-        private async Task<JsonResult> addStory(VolunteerStoryFormViewModel volunteerStoryForm, long createdBy)
-        {         
+        private async Task<JsonResult> addStory(VolunteerStoryFormViewModel volunteerStoryForm)
+        {
             Story story = new()
             {
                 Status = "draft",
                 Description = volunteerStoryForm?.Description,
                 Theme = volunteerStoryForm.theme,
                 Title = volunteerStoryForm?.Title,
-                UserId = createdBy,
+                UserId = volunteerStoryForm.UserId,
                 MissionId = volunteerStoryForm.MissionId,
                 CreatedAt = DateTime.Now,
             };
@@ -67,19 +70,26 @@ namespace CI_API.Data.Repository
             };
 
             volunteerStoryInfoViewModel.StoryMediaInfoList = await SaveVolunteerStoryMedia(volunteerStoryForm, story);
-            return new JsonResult(new apiResponse<VolunteerStoryInfoViewModel> { Message = ResponseMessages.Usersuccess, StatusCode = responseStatusCode.Success, Data = volunteerStoryInfoViewModel, Result = true });
+            return new JsonResult(new apiResponse<VolunteerStoryInfoViewModel> { Message = ResponseMessages.StorySavesuccess, StatusCode = responseStatusCode.Success, Data = volunteerStoryInfoViewModel, Result = true });
         }
 
-        private Task<IEnumerable<StoryMediaInfoViewModel>> SaveVolunteerStoryMedia(VolunteerStoryFormViewModel volunteerStoryForm, Story story)
+        private async Task<IEnumerable<StoryMediaInfoViewModel>> SaveVolunteerStoryMedia(VolunteerStoryFormViewModel volunteerStoryForm, Story story)
         {
             List<StoryMediaInfoViewModel> StoryMediaInfoList = new List<StoryMediaInfoViewModel>();
 
-            foreach (string image in volunteerStoryForm.Images)
+            foreach (var file in volunteerStoryForm.Images)
             {
+                var fileType = Path.GetExtension(file.FileName);
+                var fileName = Path.GetFileName(file.FileName);
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, @"Images\uploadfiles", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
                 StoryMedium storyMedium = new StoryMedium()
                 {
                     StoryId = story.StoryId,
-                    StoryPath = image,
+                    StoryPath = "/Images/uploadfiles/" + fileName,
                     StoryType = "aaaa"
                 };
                 _cIDbContext.StoryMedia.Add(storyMedium);
@@ -92,8 +102,175 @@ namespace CI_API.Data.Repository
                 StoryMediaInfoList.Add(storyMediaInfoViewModel);
             }
 
-            return Task.FromResult<IEnumerable<StoryMediaInfoViewModel>>(StoryMediaInfoList);
+            return await Task.FromResult<IEnumerable<StoryMediaInfoViewModel>>(StoryMediaInfoList);
         }
 
+        public async Task<JsonResult> GetMissionVolunteerApproved(long userId)
+        {
+            bool isUserIdAvailable = await Task.FromResult(_cIDbContext.MissionApplications.Any(x => x.UserId == userId));
+            if (isUserIdAvailable)
+            {
+                List<MissionApplication> missionApplicationsApproved = await Task.FromResult(_cIDbContext.MissionApplications.Where(x => x.UserId == userId && x.ApprovalStatus == "approved").Include(x => x.Mission).Include(x => x.User).ToList());
+                return new JsonResult(new apiResponse<List<MissionApplication>> { StatusCode = responseStatusCode.Success, Data = missionApplicationsApproved, Result = true });
+            }
+            else
+            {
+                return new JsonResult(new apiResponse<List<MissionApplication>> { Message = ResponseMessages.MissionNotFound, StatusCode = responseStatusCode.NotFound, Data = null, Result = false });
+            }
+        }
+
+        public async Task<JsonResult> GetStoryCards()
+        {
+            try
+            {
+                var stories = (
+                    from s in _cIDbContext.Stories
+                    join u in _cIDbContext.Users on s.UserId equals u.UserId
+                    join sm in _cIDbContext.StoryMedia on s.StoryId equals sm.StoryId into storyMediaJoin
+                    from sm in storyMediaJoin.Where(sm => sm.StoryType == "image/png" || sm.StoryType == "jpeg" || sm.StoryType == "jpg" || sm.StoryType == "img" || sm.StoryType == "png").Take(1).DefaultIfEmpty()
+                    where s.Status == "approved"
+                    orderby s.PublishedAt ascending
+                    select new StoryDataViewModel
+                    {
+                        StoryId = s.StoryId,
+                        Title = s.Title,
+                        Description = s.Description,
+                        StoryImage = sm.StoryPath,
+                        Avatar = u.Avatar,
+                        UserName = u.FirstName + " " + u.LastName,
+                        PublishedAt = s.PublishedAt,
+                        Theme = s.Theme,
+                    }
+                ).ToList();
+
+                return new JsonResult(new apiResponse<List<StoryDataViewModel>>
+                {
+                    Message = ResponseMessages.Success,
+                    Data = stories,
+                    Result = true,
+                    StatusCode = responseStatusCode.Success
+                });
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new apiResponse<string>
+                {
+                    Message = ResponseMessages.InternalServerError,
+                    StatusCode = responseStatusCode.BadRequest,
+                    Result = false
+                });
+            }
+        }
+
+        public async Task<JsonResult> GetStoryDetailsData(long StoryId, long userId)
+        {
+            try
+            {
+                StoryDetailsViewModel storyDetails = new StoryDetailsViewModel();
+                storyDetails.StoryId = StoryId;
+               
+                Story? story = _cIDbContext.Stories.FirstOrDefault(x => x.StoryId == StoryId);
+                User user = _cIDbContext.Users.FirstOrDefault(x => x.UserId == userId);
+
+                if (story == null || user == null)
+                {
+                    return new JsonResult(new apiResponse<string>
+                    {
+                        Message = ResponseMessages.IdNotFound,
+                        StatusCode = responseStatusCode.NotFound,
+                        Result = false
+                    });
+                }
+
+                storyDetails.Avatar = user.Avatar;
+                storyDetails.VolunteerName = user.FirstName + " " + user.LastName;
+                storyDetails.StoryTitle = story.Title;
+                storyDetails.VolunteerStoryDescription = story.Description;
+                if (user.WhyIVolunteer != null)
+                {
+                    storyDetails.WhyIVolunteer = user.WhyIVolunteer;
+                }
+
+                storyDetails.MissionId = story.MissionId;
+                if (story != null)
+                {
+                    storyDetails.StoryView = story.Views + 1;
+                    _cIDbContext.SaveChanges();
+                }
+
+                story.Views = storyDetails.StoryView;
+               
+                _cIDbContext.SaveChanges();
+                _cIDbContext.Stories.Update(story);
+
+                return new JsonResult(new apiResponse<StoryDetailsViewModel>
+                {
+                    Message = ResponseMessages.Success,
+                    Data = storyDetails,
+                    Result = true,
+                    StatusCode = responseStatusCode.Success
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new apiResponse<string>
+                {
+                    Message = ResponseMessages.InternalServerError,
+                    StatusCode = responseStatusCode.BadRequest,
+                    Result = false
+                });
+            }
+        }
+
+        public async Task<JsonResult> GetStoryImage(long StoryId, long userId)
+        {
+            try
+            {
+                StoryDetailsViewModel storyDetails = new StoryDetailsViewModel();
+                storyDetails.StoryId = StoryId;
+                storyDetails.StoryImages = new List<string>();
+
+                Story? story = _cIDbContext.Stories.FirstOrDefault(x => x.StoryId == StoryId);
+                User user = _cIDbContext.Users.FirstOrDefault(x => x.UserId == userId);
+
+                if (story == null || user == null)
+                {
+                    return new JsonResult(new apiResponse<string>
+                    {
+                        Message = ResponseMessages.IdNotFound,
+                        StatusCode = responseStatusCode.NotFound,
+                        Result = false
+                    });
+                }
+
+                List<string> storyImages = _cIDbContext.StoryMedia
+                    .Where(x => x.StoryId == StoryId)
+                    .Select(x => x.StoryPath)
+                    .ToList();
+
+                storyDetails.StoryImages = storyImages;
+
+                _cIDbContext.SaveChanges();
+                _cIDbContext.Stories.Update(story);
+
+                return new JsonResult(new apiResponse<StoryDetailsViewModel>
+                {
+                    Message = ResponseMessages.Success,
+                    Data = storyDetails,
+                    Result = true,
+                    StatusCode = responseStatusCode.Success
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new apiResponse<string>
+                {
+                    Message = ResponseMessages.InternalServerError,
+                    StatusCode = responseStatusCode.BadRequest,
+                    Result = false
+                });
+            }
+        }
     }
 }
+

@@ -3,7 +3,9 @@
 namespace CI_API.Core.ViewModel
 {
     public class VolunteerStoryFormViewModel
+
     {
+        public long UserId { get; set; }
         public long Id { get; set; }
 
         public long MissionId { get; set; }
@@ -14,8 +16,7 @@ namespace CI_API.Core.ViewModel
 
         public string Description { get; set; } = string.Empty;
 
-        public string[]? Images { get; set; } = null!;
-
+        public IEnumerable<IFormFile> Images { get; set; } = Enumerable.Empty<IFormFile>();
         public long?[]? ToBeDeletedIds { get; set; }
 
         public string[]? VideoUrls { get; set; } = null;
